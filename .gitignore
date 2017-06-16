@@ -9,7 +9,3 @@ tmp
 zdotdir/.zcompdump
 zdotdir/.zcompdump.zwc
 zdotdir/.zhistory
-
-#tmp
-lib/SpaceVim
-lib/oh-my-zsh
