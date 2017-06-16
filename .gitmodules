@@ -1,0 +1,6 @@
+[submodule "lib/oh-my-zsh"]
+	path = lib/oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git
+[submodule "lib/SpaceVim"]
+	path = lib/SpaceVim
+	url = https://github.com/SpaceVim/SpaceVim.git
