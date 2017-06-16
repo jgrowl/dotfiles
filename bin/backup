@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+ENCRYPTEDDIR=$HOME/Dropbox/encrypted
+NUMBEROFBACKUPS=2
+
+if [ ! -d $ENCRYPTEDDIR ]; then
+    mkdir $ENCRYPTEDDIR
+fi
+
+ulimit -n 1024
+echo 'Cleaning up old files...'
+duplicity remove-all-but-n-full $NUMBEROFBACKUPS --force file://$ENCRYPTEDDIR
+
+echo 'Encrypting files...'
+export PASSPHRASE="`pass GPG/local_duplicity_backup`"
+#duplicity cleanup --extra-clean --force file://$ENCRYPTEDDIR
+
+duplicity full --exclude="**/random_seed"  private file://$ENCRYPTEDDIR
+unset PASSPHRASE

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -e
+
+TMPPGPDIR=tmp/gnugp
+
+if [ ! -d $TMPPGPDIR ]; then
+    mkdir -p $TMPPGPDIR
+fi
+
+chmod 700 $TMPPGPDIR
+
+ENCRYPTEDDIR=$HOME/Dropbox/encrypted
+
+ulimit -n 1024
+
+if [ -d private ]; then
+    echo 'Private folder already exists. Backing up old folder...'
+    mv private private_$(date +'%Y_%m_%d_%H_%M')
+fi
+
+echo 'Restoring files...'
+duplicity --gpg-options "--homedir=$TMPPGPDIR" restore file://$ENCRYPTEDDIR private
