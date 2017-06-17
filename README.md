@@ -1,3 +1,8 @@
+# Instructions
+
+git submodule update --recursive --remote
+
+
 #private stuff
 
 ## Generate gpg key

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+stow --ignore="^[^.].*$" --ignore=private --ignore=.gitmodules -t ~/. -v -D ./ private

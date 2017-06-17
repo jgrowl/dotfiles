@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+unlink $ACTIVEDIR &> /dev/null; ln -s $PWD $ACTIVEDIR

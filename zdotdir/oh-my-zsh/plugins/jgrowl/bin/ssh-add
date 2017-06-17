@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+
+set result [exec /usr/local/bin/pass SSH/jonrowlands83@gmail.com]
+
+spawn $::env(SSH_ADD_ORIGINAL) {*}$::argv
+expect "Enter passphrase for /Users/jonathan/.ssh/id_rsa:"
+
+send "$result\n";
+expect "Identity added: /Users/jonathan/.ssh/id_rsa (/Users/jonathan/.ssh/id_rsa)"
+interact
