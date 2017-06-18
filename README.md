@@ -1,29 +1,64 @@
-# Instructions
+# About
 
-git submodule update --recursive --remote
+## Conventions
 
+* All .dotfiles in project root will be symlinked into $HOME via stow. All other files and folders will be ignored.
 
-#private stuff
+* All sensitive data should be stored in `private` directory which will also be linked via stow, but ignored by git.
 
-## Generate gpg key
+# Installation
 
-https://help.github.com/articles/generating-a-new-gpg-key/
+## Clone repo with libs
 
-gpg --gen-key
+`git clone --recursive -j8 git@github.com:jgrowl/dotfiles.git`
 
-## Generate ssh keypair
+## Restore private encrypted files
 
-https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+`./bin/restore`
+
+## Link files into home
+
+`./bin/stow`
+
+# Backing up sensitive data
+
+Data in `private` directory will be encrypted using duplicity and stored in DropBox folder. DropBox will handle syncing.
+
+`./bin/restore`
+
+# Staying up to date
+
+`git submodule update --recursive --remote`
 
 # Components
 
-## Prezto
+## Pass
 
-https://github.com/sorin-ionescu/prezto
+https://www.passwordstore.org/
+
+## Oh My Zsh
+
+https://github.com/robbyrussell/oh-my-zsh
+
+### Added via
+
+`git submodule add https://github.com/robbyrussell/oh-my-zsh.git lib/oh-my-zsh`
 
 ## SpaceVim
 
 https://github.com/SpaceVim/SpaceVim
 
+### Added via
 
-git submodule add https://github.com/SpaceVim/SpaceVim.git lib/SpaceVim
+`git submodule add https://github.com/SpaceVim/SpaceVim.git lib/SpaceVim`
+
+## Generate gpg key
+
+https://help.github.com/articles/generating-a-new-gpg-key/
+
+`gpg --gen-key`
+
+## Generate ssh keypair
+
+https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+
