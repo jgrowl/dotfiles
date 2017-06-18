@@ -1,4 +1,6 @@
 #!/usr/bin/expect -f
+# Based off of: https://unix.stackexchange.com/a/90869/236569
+# TODO: Make generic
 
 set result [exec /usr/local/bin/pass SSH/jonrowlands83@gmail.com]
 
