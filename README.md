@@ -62,3 +62,10 @@ https://help.github.com/articles/generating-a-new-gpg-key/
 
 https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
 
+
+# STUFF
+
+brew tap caskroom/fonts
+brew cask install font-hack-nerd-font
+
+brew cask install font-dejavu-sans-mono-for-powerline font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono

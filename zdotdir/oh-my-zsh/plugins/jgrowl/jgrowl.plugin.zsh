@@ -1,3 +1,8 @@
+#export GITHUBCODEDIR=$CODEDIR/github.com
+#export JGROWLCODEDIR=$GITHUBCODEDIR/jgrowl
+export ZSH_CUSTOM_JGROWL_PLUGIN=$ZSH_CUSTOM_PLUGINS/jgrowl
+
+export CODEDIR=$HOME/Code
 c() { cd $CODEDIR/$1; }
 _c() { _files -W $CODEDIR -/; }
 compdef _c c

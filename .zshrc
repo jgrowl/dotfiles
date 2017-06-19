@@ -1,7 +1,27 @@
-export CODEDIR=$HOME/Code
-export GITHUBCODEDIR=$CODEDIR/github.com
-export JGROWLCODEDIR=$GITHUBCODEDIR/jgrowl
-export DOTFILESDIR=$JGROWLCODEDIR/dotfiles
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # TODO: Test this.
+    ZSHRC_LINK_FILE="${(%):-%N}"
+    ZSHRC_FILE="$(readlink -f "$ZSHRC_LINK_FILE")"
+    DOTFILESDIR=$(dirname $ZSHRC_FILE)
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    ZSHRC_LINK_FILE="${(%):-%N}"
+    ZSHRC_FILE="$(greadlink -f "$ZSHRC_LINK_FILE")"
+    DOTFILESDIR=$(dirname $ZSHRC_FILE)
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    # POSIX compatibility layer and Linux environment emulation for Windows
+elif [[ "$OSTYPE" == "msys" ]]; then
+    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+elif [[ "$OSTYPE" == "win32" ]]; then
+    # I'm not sure this can happen.
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    # ...
+else
+    # Unknown.
+fi
+
+# The cannonical path to the dotfiles directory
+export DOTFILESDIR
+
 export DOTFILESLIBDIR=$DOTFILESDIR/lib
 export ZDOTDIR=$DOTFILESDIR/zdotdir
 
@@ -56,7 +76,6 @@ ZSH_CUSTOM=$ZDOTDIR/oh-my-zsh
 export ZSH_CUSTOM
 
 export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
-export ZSH_CUSTOM_JGROWL_PLUGIN=$ZSH_CUSTOM_PLUGINS/jgrowl
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -65,32 +84,3 @@ export ZSH_CUSTOM_JGROWL_PLUGIN=$ZSH_CUSTOM_PLUGINS/jgrowl
 plugins=(jgrowl git vi-mode pass ssh-agent gpg-agent)
 
 source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
