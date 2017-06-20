@@ -43,4 +43,4 @@ let g:clang2_placeholder_prev = ''
 "let g:spacevim_colorscheme_bg = 'dark'
 "
 
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+"autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
