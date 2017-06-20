@@ -37,9 +37,9 @@ fi
 typeset -gU cdpath fpath mailpath path
 
 # Set the the list of directories that cd searches.
-# cdpath=(
-#   $cdpath
-# )
+ cdpath=(
+   $cdpath
+ )
 
 # Set the list of directories that Zsh searches for programs.
 path=(
