@@ -73,7 +73,7 @@ ZSH_THEME="robbyrussell"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$DOTFILESDIR/oh-my-zsh
+ZSH_CUSTOM=$DOTFILESDIR/custom
 export ZSH_CUSTOM
 
 export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
