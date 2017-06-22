@@ -1,7 +1,1 @@
-.DS_Store
-.svn
-*~
-.*.swp
-
-# These are files I want to ignore inside of my dotfiles repo. It feels a little hacky, but I think it will work.
 private

@@ -1,0 +1,5 @@
+# This is the global user gitignore 
+.DS_Store
+.svn
+*~
+.*.swp

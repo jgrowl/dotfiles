@@ -28,7 +28,7 @@ Data in `private` directory will be encrypted using duplicity and stored in Drop
 
 # Staying up to date
 
-`git submodule update --recursive --remote`
+`./bin/update`
 
 # Components
 

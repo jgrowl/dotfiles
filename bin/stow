@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-stow --ignore="^[^.].*$" --ignore=private --ignore=.gitmodules -t ~/. -v ./ private
+stow --ignore="^[^.].*$" --ignore=private --ignore=.gitmodules --ignore=.gitignore -t ~/. -v ./ private
+
+echo "LINK: gitignore"
+ln -s gitignore ~/.gitignore
