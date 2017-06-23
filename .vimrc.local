@@ -1,7 +1,1 @@
 set clipboard=unnamedplus
-
-" Fixes problem where I was having to hit esc and wait before dropping into
-" command mode.
-" Source: https://github.com/Shougo/neocomplcache.vim/issues/350
-iunmap <Esc>
-
