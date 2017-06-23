@@ -71,3 +71,6 @@ brew cask install font-hack-nerd-font
 brew cask install font-dejavu-sans-mono-for-powerline font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono
 
 brew install coreutils
+
+## For clipboard inside of tmux
+brew install reattach-to-user-namespace
