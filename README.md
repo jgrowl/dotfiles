@@ -74,3 +74,7 @@ brew install coreutils
 
 ## For clipboard inside of tmux
 brew install reattach-to-user-namespace
+
+# For making git use nvim buffer instead of trying to open another instance
+
+pip3 install neovim-remote
