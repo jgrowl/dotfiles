@@ -70,3 +70,22 @@ bindkey -M vicmd '?' history-incremental-search-backward
 export PATH="$(dirname $0)/bin:$PATH"
 
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# Platform specific variables
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # TODO: add path
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    # POSIX compatibility layer and Linux environment emulation for Windows
+elif [[ "$OSTYPE" == "msys" ]]; then
+    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+elif [[ "$OSTYPE" == "win32" ]]; then
+    # I'm not sure this can happen.
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    # ...
+else
+    # Unknown.
+fi
+
+export RUST_SRC_PATH

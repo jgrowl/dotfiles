@@ -13,7 +13,7 @@
 "call SpaceVim#layers#load('lang#lua')
 "call SpaceVim#layers#load('lang#perl')
 "call SpaceVim#layers#load('lang#swig')
-"call SpaceVim#layers#load('lang#rust')
+call SpaceVim#layers#load('lang#rust')
 "call SpaceVim#layers#load('lang#java')
 "call SpaceVim#layers#load('lang#javascript')
 "call SpaceVim#layers#load('lang#vim')
@@ -43,5 +43,7 @@
 ""let g:spacevim_colorscheme = 'onedark'
 ""let g:spacevim_colorscheme_bg = 'dark'
 ""
+
+"let g:racer_cmd = "~/.cargo/bin/racer"
 
 ""autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
