@@ -76,5 +76,6 @@ brew install coreutils
 brew install reattach-to-user-namespace
 
 # For making git use nvim buffer instead of trying to open another instance
+# Source: https://github.com/mhinz/neovim-remote
 
 pip3 install neovim-remote

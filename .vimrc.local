@@ -1,1 +1,6 @@
 "set clipboard+=unnamedplus
+
+"" If I decide to change my global git editor settings.
+" if has('nvim')
+"   let $VISUAL = 'nvr -cc split --remote-wait'
+" endif
