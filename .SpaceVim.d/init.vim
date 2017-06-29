@@ -47,3 +47,9 @@ call SpaceVim#layers#load('lang#rust')
 "let g:racer_cmd = "~/.cargo/bin/racer"
 
 ""autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+
+
+" call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'call VimFilerExplorer -find', 'test custom SPC', 1)
+call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'call jgrowl#OpenVimfiler()', 'Reveal file', 1)
+

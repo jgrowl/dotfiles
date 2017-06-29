@@ -79,3 +79,7 @@ brew install reattach-to-user-namespace
 # Source: https://github.com/mhinz/neovim-remote
 
 pip3 install neovim-remote
+
+# For vint
+
+`pip install vim-vint`

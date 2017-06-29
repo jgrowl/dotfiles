@@ -64,7 +64,7 @@ compdef _s s
 # Rebind incremental search because of vi mode
 bindkey -M vicmd '?' history-incremental-search-backward
 
-export SPACEVIMDIR=$DOTFILESDIR/SpaceVim.d
+#export SPACEVIMDIR=$DOTFILESDIR/SpaceVim.d
 
 # Add plugin's bin directory to path
 export PATH="$(dirname $0)/bin:$PATH"
