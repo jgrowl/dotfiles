@@ -44,12 +44,28 @@ call SpaceVim#layers#load('lang#rust')
 ""let g:spacevim_colorscheme_bg = 'dark'
 ""
 
-"let g:racer_cmd = "~/.cargo/bin/racer"
+let g:racer_cmd = '~/.cargo/bin/racer'
 
-""autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-
-
-" call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'call VimFilerExplorer -find', 'test custom SPC', 1)
 call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'call jgrowl#OpenVimfiler()', 'Reveal file', 1)
 
+" Disable continuing comments to new lines.
+" URL: https://stackoverflow.com/a/23326474/127280
+"
+" These did not work:
+" URL: https://superuser.com/a/271024/192049
+" 	autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
+" 	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+augroup Format-Options
+    autocmd!
+    autocmd BufEnter * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+    " This can be done as well instead of the previous line, for setting formatoptions as you choose:
+    autocmd BufEnter * setlocal formatoptions=crqn2l1j
+augroup END
+
+" " Neomake configuration.
+" augroup my_neomake_cmds
+"     autocmd!
+"     " Have neomake run cargo when Rust files are saved.
+"     autocmd BufWritePost *.rs Neomake! cargo
+" augroup END
