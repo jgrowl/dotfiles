@@ -8,6 +8,11 @@
 
 # Installation
 
+## Install deps
+
+`brew install greadlink`
+`brew install coreutils`
+
 ## Clone repo with libs
 
 `git clone --recursive -j8 git@github.com:jgrowl/dotfiles.git`
