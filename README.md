@@ -10,8 +10,9 @@
 
 ## Install deps
 
-`brew install greadlink`
-`brew install coreutils`
+`brew tap discoteq/discoteq`
+
+`brew install coreutils greadlink flock`
 
 ## Clone repo with libs
 

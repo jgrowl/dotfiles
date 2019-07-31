@@ -1,29 +1,4 @@
-#!/usr/bin/expect -f
-
-#
-# Based off of: https://unix.stackexchange.com/a/90869/236569
-#
-set home $::env(HOME);
-set ssh_dir "$home/.ssh"
-
-if { $::argc > 0 } {
-    set args $::argc
-} else {
-    # TODO: We should probably find all keys in ssh_dir instead of just looking for default
-    # to stay more in-line with expected behavior of ssh-add!
-    set args {"id_rsa"}
-}
-
-foreach var $args {
-    set key_path "$ssh_dir/$var"
-    set pass_executable [exec which pass]
-    # SSH passwords are assumed to be stored in passwordstore in SSH directory!
-    set pass [exec $pass_executable SSH/$var]
-        spawn ssh-add "$key_path"
-        expect "Enter passphrase for $key_path:"
-
-        send "$pass\n";
-    expect "Identity added: $key_path ($key_path)"
-        interact
-
-}
+#!/bin/bash
+# FLOCKER boilerplate taken from man docs
+[ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -n "$0" "$0" "$@" || :
+./bin/_ssh-add-pass
