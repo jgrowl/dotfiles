@@ -14,9 +14,21 @@
 
 `brew install coreutils greadlink flock`
 
-## Clone repo with libs
+### For clipboard inside of tmux
 
-`git clone --recursive -j8 git@github.com:jgrowl/dotfiles.git`
+`brew install reattach-to-user-namespace`
+
+### Fonts
+
+`brew tap caskroom/fonts`
+
+`brew cask install font-hack-nerd-font font-dejavu-sans-mono-for-powerline font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono`
+
+
+## Clone repo with libs from HTTP
+
+`git clone --recursive -j8 https://github.com/jgrowl/dotfiles.git`
+
 
 ## Restore private encrypted files
 
@@ -28,7 +40,7 @@
 
 # Backing up sensitive data
 
-Data in `private` directory will be encrypted using duplicity and stored in DropBox folder. DropBox will handle syncing.
+Data in `private` directory will be encrypted using duplicity and stored in synced folder.
 
 `./bin/restore`
 
@@ -71,15 +83,7 @@ https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-s
 
 # STUFF
 
-brew tap caskroom/fonts
-brew cask install font-hack-nerd-font
 
-brew cask install font-dejavu-sans-mono-for-powerline font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono
-
-brew install coreutils
-
-## For clipboard inside of tmux
-brew install reattach-to-user-namespace
 
 # For making git use nvim buffer instead of trying to open another instance
 # Source: https://github.com/mhinz/neovim-remote
