@@ -11,8 +11,6 @@ chmod 700 $TMPPGPDIR
 
 #ENCRYPTEDDIR=$HOME/Dropbox/encrypted
 ENCRYPTEDDIR="$HOME/Google Drive/encrypted/dotfiles"
-echo 'yo'
-echo $ENCRYPTEDDIR
 
 ulimit -n 1024
 
