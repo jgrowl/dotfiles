@@ -1,0 +1,5 @@
+#!/bin/bash
+REPO=https://github.com/jgrowl/dotfiles.git
+
+git clone --recursive -j8 $REPO
+./bin/set-remote

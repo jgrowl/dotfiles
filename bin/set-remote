@@ -1,1 +1,6 @@
-git remote set-url origin git@github.com:jgrowl/dotfiles.git
+#!/bin/bash
+#git remote set-url origin git@github.com:jgrowl/dotfiles.git
+
+REPO=git@github.com:jgrowl/dotfiles.git
+git remote set-url origin $REPO
+
