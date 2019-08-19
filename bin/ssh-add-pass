@@ -1,4 +1,4 @@
 #!/bin/bash
 # FLOCKER boilerplate taken from man docs
 [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -n "$0" "$0" "$@" || :
-./bin/_ssh-add-pass
+$DOTFILESDIR/bin/_ssh-add-pass
