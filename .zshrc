@@ -80,7 +80,7 @@ export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jgrowl git vi-mode pass ssh-agent gpg-agent)
+plugins=(jgrowl git vi-mode pass gpg-agent ssh-agent)
 
 # I'm monkey patching this my own custom ssh-add that calls pass to get passwords
 alias ssh-add="$DOTFILESDIR/bin/ssh-add-pass"
