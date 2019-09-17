@@ -1,4 +1,15 @@
 #!/bin/bash
+
 # FLOCKER boilerplate taken from man docs
 [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -n "$0" "$0" "$@" || :
-$DOTFILESDIR/bin/_ssh-add-pass
+
+PASS_BIN=`which pass`
+
+# TODO: Loop through all keys / make generic
+PASS_ID="SSH/id_rsa"
+SSH_DIR="$HOME/.ssh"
+
+SSH_KEY_PATH="$SSH_DIR/id_rsa"
+
+
+$DOTFILESDIR/bin/_ssh-add-pass $PASS_BIN $PASS_ID $SSH_KEY_PATH

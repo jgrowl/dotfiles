@@ -1,29 +1,15 @@
 #!/usr/bin/expect -f
 
-#
-# Based off of: https://unix.stackexchange.com/a/90869/236569
-#
-set home $::env(HOME);
-set ssh_dir "$home/.ssh"
+#Expects args: $PASS_BIN $PASS_ID $SSH_KEY_PATH
+set pass_executable [lindex $argv 0];
+set pass_id [lindex $argv 1];
+set key_path [lindex $argv 2];
 
-if { $::argc > 0 } {
-    set args $::argc
-} else {
-    # TODO: We should probably find all keys in ssh_dir instead of just looking for default
-    # to stay more in-line with expected behavior of ssh-add!
-    set args {"id_rsa"}
-}
+set pass [exec $pass_executable $pass_id]
 
-foreach var $args {
-    set key_path "$ssh_dir/$var"
-    set pass_executable [exec which pass]
-    # SSH passwords are assumed to be stored in passwordstore in SSH directory!
-    set pass [exec $pass_executable SSH/$var]
-        spawn ssh-add "$key_path"
-        expect "Enter passphrase for $key_path:"
+spawn ssh-add "$key_path"
+expect "Enter passphrase for $key_path:"
 
-        send "$pass\n";
-    expect "Identity added: $key_path ($key_path)"
-        interact
-
-}
+send "$pass\n";
+expect "Identity added: $key_path ($key_path)"
+interact
