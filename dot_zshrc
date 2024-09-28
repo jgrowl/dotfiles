@@ -15,7 +15,7 @@ else
     # Unknown.
 fi
 
-DOTFILESDIR="~/.local/share/chezmoi"
+DOTFILESDIR=~/.local/share/chezmoi
 
 # The cannonical path to the dotfiles directory
 export DOTFILESDIR
