@@ -1,6 +1,6 @@
 # dotfiles 
 
-See `INSTALL.md` for installation details
+See [`INSTALL.md`](INSTALL.md) for installation details
 
 ## dependencies
 
