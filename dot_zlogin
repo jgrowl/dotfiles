@@ -6,3 +6,6 @@
     zcompile "$zcompdump"
   fi
 } &!
+
+# Start sway optionally
+# sway
