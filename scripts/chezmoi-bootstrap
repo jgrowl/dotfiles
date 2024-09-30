@@ -3,6 +3,6 @@ set -e
 
 GITHUB_USERNAME=jgrowl
 sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply $GITHUB_USERNAME
-#git submodule update --init --recursive
+(cd $HOME/.local/share/chezmoi ;git submodule update --init --recursive)
 
 
