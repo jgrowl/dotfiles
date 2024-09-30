@@ -1,7 +1,5 @@
-DOTFILESDIR=~/Code/dotfiles
-
 # The cannonical path to the dotfiles directory
-export DOTFILESDIR
+export DOTFILESDIR=$HOME/Code/dotfiles
 export DOTFILESLIBDIR=$DOTFILESDIR/lib
 
 # If you come from bash you might have to change your $PATH.
@@ -52,10 +50,11 @@ ZSH_THEME="jgrowl"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$DOTFILESDIR/custom
+ZSH_CUSTOM=$ZDOTDIR/custom
 export ZSH_CUSTOM
 
 export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
+export ZSH_CUSTOM_THEMES=$ZSH_CUSTOM/themes
 
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
@@ -66,10 +65,9 @@ plugins=(jgrowl git vi-mode pass)
 
 source $ZSH/oh-my-zsh.sh
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
+HISTSIZE=268435456
+export SAVEHIST="$HISTSIZE"
+export HISTFILE="$ZDOTDIR/.zsh_history"
 
 
 ## Set up the prompt
