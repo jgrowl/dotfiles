@@ -14,6 +14,3 @@ https://github.com/twpayne/chezmoi
 
 https://github.com/robbyrussell/oh-my-zsh
 
-#### Added via
-
-`git submodule add https://github.com/robbyrussell/oh-my-zsh.git lib/oh-my-zsh`

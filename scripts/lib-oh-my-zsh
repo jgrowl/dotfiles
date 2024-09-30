@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -e
+
+# This script was used to add the oh-my-zsh lib to the dotfiles dir. 
+echo "This script should not be run again!."; exit 1;
+
+git submodule add https://github.com/robbyrussell/oh-my-zsh.git lib/oh-my-zsh
