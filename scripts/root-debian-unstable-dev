@@ -7,4 +7,4 @@ set -e
 [ "$UID" -eq 0 ] || { echo "This script must be run as root."; exit 1;}
 
 
-apt install -y build-essential unzip scdoc cmake meson cava fonts-font-awesome fonts-jetbrains-mono fonts-noto-color-emoji fonts-roboto
+apt install -y build-essential unzip scdoc cmake meson cava fonts-font-awesome fonts-jetbrains-mono fonts-noto-color-emoji fonts-roboto tmux
