@@ -28,6 +28,9 @@
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 #
+#
+
+
 
 export ZSH_CUSTOM_JGROWL_PLUGIN=$ZSH_CUSTOM_PLUGINS/jgrowl
 
@@ -56,11 +59,11 @@ bindkey -M vicmd '?' history-incremental-search-backward
 # Add plugin's bin directory to path
 export PATH="$(dirname $0)/bin:$PATH"
 
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
 
 # Platform specific variables
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    # TODO: add path
+    # Linux specific 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
     export RUST_SRC_PATH

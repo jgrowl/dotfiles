@@ -1,9 +1,6 @@
 # The cannonical path to the dotfiles directory
-export DOTFILESDIR=$HOME/Code/dotfiles
+export DOTFILESDIR=$HOME/.local/share/chezmoi
 export DOTFILESLIBDIR=$DOTFILESDIR/lib
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=$DOTFILESLIBDIR/oh-my-zsh
@@ -13,6 +10,26 @@ export ZSH=$DOTFILESLIBDIR/oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 ZSH_THEME="jgrowl"
+
+# Would you like to use another custom folder than $ZSH/custom?
+export ZSH_CUSTOM=$ZDOTDIR/custom
+
+export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
+export ZSH_CUSTOM_THEMES=$ZSH_CUSTOM/themes
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(jgrowl git vi-mode pass)
+
+source $ZSH/oh-my-zsh.sh
+
+HISTSIZE=268435456
+export SAVEHIST="$HISTSIZE"
+export HISTFILE="$ZDOTDIR/.zsh_history"
+
+alias vim="nvim --clean"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -48,28 +65,6 @@ ZSH_THEME="jgrowl"
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$ZDOTDIR/custom
-export ZSH_CUSTOM
-
-export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
-export ZSH_CUSTOM_THEMES=$ZSH_CUSTOM/themes
-
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(jgrowl git vi-mode pass)
-
-source $ZSH/oh-my-zsh.sh
-
-HISTSIZE=268435456
-export SAVEHIST="$HISTSIZE"
-export HISTFILE="$ZDOTDIR/.zsh_history"
-
-alias vim="nvim --clean"
 
 
 ## Set up the prompt

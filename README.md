@@ -1,6 +1,6 @@
 # dotfiles 
 
-See [`INSTALL.md`](INSTALL.md) for installation details
+`sh -c "$(curl -fsLS https://raw.githubusercontent.com/jgrowl/dotfiles/refs/heads/main/scripts/lib-oh-my-zsh)"`
 
 ## dependencies
 
