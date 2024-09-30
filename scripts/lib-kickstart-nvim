@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+# This script was used to add the oh-my-zsh lib to the dotfiles dir. 
+echo "This script should not be run again!."; exit 1;
+
+git submodule add https://github.com/nvim-lua/kickstart.nvim.git lib/kickstart.nvim
+
+cp -R lib/kickstart.nvim ./dot_config/nvim
+rm -Rf ./dot_config/nvim/.git

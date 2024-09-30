@@ -69,6 +69,8 @@ HISTSIZE=268435456
 export SAVEHIST="$HISTSIZE"
 export HISTFILE="$ZDOTDIR/.zsh_history"
 
+alias vim="nvim --clean"
+
 
 ## Set up the prompt
 #

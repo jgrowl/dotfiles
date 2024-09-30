@@ -3,8 +3,8 @@ export ZDOTDIR="$HOME/.config/zsh"
 #
 # Editors
 #
-export EDITOR='nvim'
-export VISUAL='nvim'
+export EDITOR='nvim --clean'
+export VISUAL='nvim --clean'
 export PAGER='less'
 
 #
