@@ -1,6 +1,6 @@
 # dotfiles 
 
-`sh -c "$(curl -fsLS https://raw.githubusercontent.com/jgrowl/dotfiles/refs/heads/main/scripts/lib-oh-my-zsh)"`
+`sh -c "$(curl -fsLS https://raw.githubusercontent.com/jgrowl/dotfiles/refs/heads/main/scripts/chezmoi-bootstrap)"`
 
 ## dependencies
 
