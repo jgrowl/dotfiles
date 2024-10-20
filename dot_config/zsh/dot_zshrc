@@ -30,6 +30,9 @@ export SAVEHIST="$HISTSIZE"
 export HISTFILE="$ZDOTDIR/.zsh_history"
 
 alias vim="nvim --clean"
+alias vi="nvim --clean"
+
+eval "$(zoxide init zsh)"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
