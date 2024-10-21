@@ -1,6 +1,3 @@
-[submodule "lib/oh-my-zsh"]
-	path = lib/oh-my-zsh
-	url = https://github.com/robbyrussell/oh-my-zsh.git
 [submodule "lib/kickstart.nvim"]
 	path = lib/kickstart.nvim
 	url = https://github.com/nvim-lua/kickstart.nvim.git
