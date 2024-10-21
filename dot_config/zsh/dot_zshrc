@@ -156,7 +156,7 @@ compdef _.d .d
 
 .s() { $DOTFILESSCRIPTSDIR/$1; }
 _.s() { _files -W $DOTFILESSCRIPTSDIR/ -/; }
-compdef _s s
+compdef _.s .s
 
 # autocorrect is more annoying than helpful
 #unsetopt correct_all
