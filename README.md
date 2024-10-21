@@ -32,9 +32,16 @@ https://github.com/robbyrussell/oh-my-zsh
 https://github.com/joshmedeski/sesh
 
 inside zsh:  Ctrl+s
+
 inside tmux: CTRL+b T
 
 
 ### Patched Nerd Fonts
 
 https://github.com/ryanoasis/nerd-fonts
+
+
+### Spaceship prompt
+
+https://github.com/spaceship-prompt/spaceship-prompt
+
