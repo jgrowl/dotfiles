@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# Deletes all svn files in current directory.
-# TODO: add ability to specify a folder
-#http://stackoverflow.com/a/1294608/127280
-find . -name .svn -exec rm -rf {} \;
