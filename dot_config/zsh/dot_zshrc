@@ -1,29 +1,137 @@
+# Start configuration added by Zim install {{{
+#
+# User configuration sourced by interactive shells
+#
+
+# -----------------
+# Zsh configuration
+# -----------------
+
+#
+# History
+#
+
+# Remove older command from the history if a duplicate is to be added.
+setopt HIST_IGNORE_ALL_DUPS
+
+#
+# Input/output
+#
+
+# Set editor default keymap to emacs (`-e`) or vi (`-v`)
+bindkey -e
+
+# Prompt for spelling correction of commands.
+#setopt CORRECT
+
+# Customize spelling correction prompt.
+#SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+
+# Remove path separator from WORDCHARS.
+WORDCHARS=${WORDCHARS//[\/]}
+
+# -----------------
+# Zim configuration
+# -----------------
+
+# Use degit instead of git as the default tool to install and update modules.
+#zstyle ':zim:zmodule' use 'degit'
+
+# --------------------
+# Module configuration
+# --------------------
+
+#
+# git
+#
+
+# Set a custom prefix for the generated aliases. The default prefix is 'G'.
+#zstyle ':zim:git' aliases-prefix 'g'
+
+#
+# input
+#
+
+# Append `../` to your input for each `.` you type after an initial `..`
+#zstyle ':zim:input' double-dot-expand yes
+
+#
+# termtitle
+#
+
+# Set a custom terminal title format using prompt expansion escape sequences.
+# See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
+# If none is provided, the default '%n@%m: %~' is used.
+#zstyle ':zim:termtitle' format '%1~'
+
+#
+# zsh-autosuggestions
+#
+
+# Disable automatic widget re-binding on each precmd. This can be set when
+# zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc.
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+# Customize the style that the suggestions are shown with.
+# See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+
+#
+# zsh-syntax-highlighting
+#
+
+# Set what highlighters will be used.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+# Customize the main highlighter styles.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
+#typeset -A ZSH_HIGHLIGHT_STYLES
+#ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
+
+# ------------------
+# Initialize modules
+# ------------------
+
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  if (( ${+commands[curl]} )); then
+    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  else
+    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  fi
+fi
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
+
+# ------------------------------
+# Post-init module configuration
+# ------------------------------
+
+#
+# zsh-history-substring-search
+#
+
+zmodload -F zsh/terminfo +p:terminfo
+# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
+for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
+for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
+for key ('k') bindkey -M vicmd ${key} history-substring-search-up
+for key ('j') bindkey -M vicmd ${key} history-substring-search-down
+unset key
+# }}} End configuration added by Zim install
+
 # The cannonical path to the dotfiles directory
 export DOTFILESDIR=$HOME/.local/share/chezmoi
 export DOTFILESLIBDIR=$DOTFILESDIR/lib
 
-# Path to your oh-my-zsh installation.
-export ZSH=$DOTFILESLIBDIR/oh-my-zsh
-
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
-ZSH_THEME="jgrowl"
-
-# Would you like to use another custom folder than $ZSH/custom?
-export ZSH_CUSTOM=$ZDOTDIR/custom
-
-export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
-export ZSH_CUSTOM_THEMES=$ZSH_CUSTOM/themes
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(jgrowl git vi-mode pass)
-
-source $ZSH/oh-my-zsh.sh
 
 HISTSIZE=268435456
 export SAVEHIST="$HISTSIZE"
@@ -32,7 +140,110 @@ export HISTFILE="$ZDOTDIR/.zsh_history"
 alias vim="nvim --clean"
 alias vi="nvim --clean"
 
+
+export CODEDIR=$HOME/Code
+c() { cd $CODEDIR/$1; }
+_c() { _files -W $CODEDIR -/; }
+compdef _c c
+
+h() { cd ~/$1; }
+_h() { _files -W ~/ -/; }
+compdef _h h
+
+.d() { cd $DOTFILESDIR/$1; }
+_.d() { _files -W $DOTFILESDIR -/; }
+compdef _.d .d
+
+# autocorrect is more annoying than helpful
+#unsetopt correct_all
+
+# Rebind incremental search because of vi mode
+bindkey -M vicmd '?' history-incremental-search-backward
+
+# Add plugin's bin directory to path
+#export PATH="$(dirname $0)/bin:$PATH"
+
+export PATH="$HOME/bin:$PATH"
+
+export PATH="$HOME/.cargo/bin:$PATH" # RUST
+export PATH="$HOME/go/bin:$PATH" # GO
+
+export PATH="$PATH:/opt/nvim-linux64/bin" # OPT NEOVIM
+
+#export PATH="$PATH:/opt/yazi/bin" # OPT yazi
+
+# Platform specific variables
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Linux specific 
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    #RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
+    #export RUST_SRC_PATH
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    # POSIX compatibility layer and Linux environment emulation for Windows
+elif [[ "$OSTYPE" == "msys" ]]; then
+    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+elif [[ "$OSTYPE" == "win32" ]]; then
+    # I'm not sure this can happen.
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    # ...
+else
+    # Unknown.
+fi
+
+# Following is for sesh for tmux sessions
+function sesh-sessions() {
+  {
+    exec </dev/tty
+    exec <&1
+    local session
+    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '?  ')
+    zle reset-prompt > /dev/null 2>&1 || true
+    [[ -z "$session" ]] && return
+    sesh connect $session
+  }
+}
+
+zle     -N             sesh-sessions
+bindkey -M emacs '\es' sesh-sessions
+bindkey -M vicmd '\es' sesh-sessions
+bindkey -M viins '\es' sesh-sessions
+# end sesh config
+
+# zoxide 
 eval "$(zoxide init zsh)"
+
+
+## This is my old ohmyzsh config
+
+# # Path to your oh-my-zsh installation.
+# export ZSH=$DOTFILESLIBDIR/oh-my-zsh
+# 
+# # Set name of the theme to load. Optionally, if you set this to "random"
+# # it'll load a random theme each time that oh-my-zsh is loaded.
+# # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# #ZSH_THEME="robbyrussell"
+# ZSH_THEME="jgrowl"
+# 
+# # Would you like to use another custom folder than $ZSH/custom?
+# export ZSH_CUSTOM=$ZDOTDIR/custom
+# 
+# export ZSH_CUSTOM_PLUGINS=$ZSH_CUSTOM/plugins
+# export ZSH_CUSTOM_THEMES=$ZSH_CUSTOM/themes
+# 
+# # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# # Example format: plugins=(rails git textmate ruby lighthouse)
+# # Add wisely, as too many plugins slow down shell startup.
+# plugins=(jgrowl git vi-mode pass)
+# 
+# source $ZSH/oh-my-zsh.sh
+
+
+
+
+
+
+## Following is Default debian zshrc config
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

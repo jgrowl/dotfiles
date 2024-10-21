@@ -59,14 +59,19 @@ bindkey -M vicmd '?' history-incremental-search-backward
 # Add plugin's bin directory to path
 export PATH="$(dirname $0)/bin:$PATH"
 
-export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+
+export PATH="$HOME/.cargo/bin:$PATH" # RUST
+export PATH="$HOME/go/bin:$PATH" # GO
+
+export PATH="$PATH:/opt/nvim-linux64/bin" # OPT NEOVIM
 
 # Platform specific variables
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # Linux specific 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
-    export RUST_SRC_PATH
+    #RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
+    #export RUST_SRC_PATH
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # POSIX compatibility layer and Linux environment emulation for Windows
 elif [[ "$OSTYPE" == "msys" ]]; then
@@ -79,4 +84,19 @@ else
     # Unknown.
 fi
 
+function sesh-sessions() {
+  {
+    exec </dev/tty
+    exec <&1
+    local session
+    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '?  ')
+    zle reset-prompt > /dev/null 2>&1 || true
+    [[ -z "$session" ]] && return
+    sesh connect $session
+  }
+}
 
+zle     -N             sesh-sessions
+bindkey -M emacs '\es' sesh-sessions
+bindkey -M vicmd '\es' sesh-sessions
+bindkey -M viins '\es' sesh-sessions

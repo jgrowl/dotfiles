@@ -13,3 +13,9 @@ export PAGER='less'
 if [[ -z "$LANG" ]]; then
   export LANG='en_US.UTF-8'
 fi
+
+
+# skip this when using zim
+skip_global_compinit=1
+
+
