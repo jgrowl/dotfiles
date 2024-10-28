@@ -20,10 +20,6 @@ https://github.com/twpayne/chezmoi
 
 https://zimfw.sh/
 
-### ohmyzsh
-
-https://github.com/robbyrussell/oh-my-zsh
-
 
 ### fzf
 
