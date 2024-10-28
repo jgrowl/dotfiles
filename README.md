@@ -2,7 +2,8 @@
 
 ## install
 
-`sh -c "$(curl -fsLS https://raw.githubusercontent.com/jgrowl/dotfiles/refs/heads/main/scripts/chezmoi-bootstrap)"`
+`GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply $GITHUB_USERNAME`
+
 
 ## dependencies
 
