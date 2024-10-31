@@ -66,6 +66,7 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
     bindsym $mod+Shift+Ctrl+n exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland firefox
     bindsym $mod+Shift+Ctrl+p exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland firefox -private
+    bindsym $mod+Print exec grimshot save output
 
 
 #
