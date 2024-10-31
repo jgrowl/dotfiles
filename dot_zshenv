@@ -1,11 +1,18 @@
+# Note that this file gets run first when logging in via ssh or terminal
+# It does not run again if you open subshells. 
+# Any changes here while in sway will not get updated until re-login.
+
 export ZDOTDIR="$HOME/.config/zsh"
 
 #
 # Editors
 #
-export EDITOR='nvim --clean'
-export VISUAL='nvim --clean'
+export EDITOR='nvim'
+export VISUAL='nvim'
 export PAGER='less'
+
+# We can set clean option if too much is getting loaded
+#export VISUAL='nvim --clean'
 
 #
 # Language
