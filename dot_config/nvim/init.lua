@@ -385,7 +385,8 @@ require('lazy').setup({
         defaults = {
           file_ignore_patterns = {
             --- This is meant for dotfiles lib, but need to make it specific
-            'lib',
+            -- 'lib',
+            '$HOME/.local/share/chezmoi',
           },
           --   mappings = {
           --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
