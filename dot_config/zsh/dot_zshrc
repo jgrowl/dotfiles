@@ -137,9 +137,10 @@ HISTSIZE=268435456
 export SAVEHIST="$HISTSIZE"
 export HISTFILE="$ZDOTDIR/.zsh_history"
 
-alias vim="nvim"
-alias vi="nvim --clean"
-
+# Don't alias `vi` since it is a system tool. If nvim is not linked properly then 
+# basic editing will be broken. nvim is more of a replacement for vim anyway so
+# just alias over it instead. We will use the clean version for basic editing. 
+alias vim="nvim --clean"
 
 export CODEDIR=$HOME/Code
 c() { cd $CODEDIR/$1; }
@@ -169,7 +170,9 @@ export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH" # RUST
 export PATH="$HOME/go/bin:$PATH" # GO
 
-export PATH="$PATH:/opt/nvim-linux64/bin" # OPT NEOVIM
+#export PATH="$PATH:/opt/nvim-linux64/bin" # OPT NEOVIM
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin" # OPT NEOVIM
+
 
 #export PATH="$PATH:/opt/yazi/bin" # OPT yazi
 
