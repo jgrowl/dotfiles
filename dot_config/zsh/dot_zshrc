@@ -173,6 +173,9 @@ export PATH="$HOME/go/bin:$PATH" # GO
 #export PATH="$PATH:/opt/nvim-linux64/bin" # OPT NEOVIM
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin" # OPT NEOVIM
 
+# Make virtualbox use wayland 
+#export QT_QPA_PLATFORM="wayland"
+
 
 #export PATH="$PATH:/opt/yazi/bin" # OPT yazi
 
