@@ -60,3 +60,38 @@ https://github.com/ryanoasis/nerd-fonts
 
 https://github.com/spaceship-prompt/spaceship-prompt
 
+
+### Audio stuff
+
+#### Search for sink
+
+`pactl list | less`
+
+or
+
+`pactl list | grep game`
+
+#### Set sink id
+
+pactl set-default-sink 56
+
+#### Set volume
+
+pactl set-sink-volume 56 100%
+
+
+#### GPU Passthrough notes
+
+0e:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 33 [Radeon RX 7600/7600 XT/7600M XT/7600S/7700S / PRO W7600] [1002:7480] (rev cf)
+
+
+
+0f:00.0 VGA compatible controller [0300]: NVIDIA Corporation AD104 [GeForce RTX 4070 Ti] [10de:2782] (rev a1)
+
+0f:00.1 Audio device [0403]: NVIDIA Corporation AD104 High Definition Audio Controller [10de:22bc] (rev a1)
+
+Put these ids in
+/etc/modprobe.d/vfio.conf
+
+
+
