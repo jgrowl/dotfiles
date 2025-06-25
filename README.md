@@ -11,26 +11,17 @@
     deb-src http://deb.debian.org/debian/ unstable main contrib non-free
 
 
-`apt update`
-`apt upgrade`
+`apt update && upgrade`
 
 ## generate new ssh key
 
-`ssh-keygen -t ed25519 -C "your_email@example.com`
+`ssh-keygen -t ed25519 -C "your_email@example.com"`
 
 ## install basic deps
 
-`apt install git`
-
-`apt install zoxide`
-
-
-# Note: Need to test this more. Can fail if env var does not get set write or if git is not installed!
-# TODO: Write a script to do this 
+`apt install git zoxide fzf`
 
 env `GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply git@github.com:$GITHUB_USERNAME/dotfiles.git`
-
-#`GITHUB_USERNAME='jgrowl' sh -c '~/.local/bin/chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git'`
 
 
 ## dependencies
@@ -38,6 +29,10 @@ env `GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --ap
 ### tmux
 
 https://tmuxcheatsheet.com/
+
+### go
+
+https://go.dev/doc/install
 
 ### chezmoi
 
