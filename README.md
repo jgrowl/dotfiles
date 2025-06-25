@@ -1,6 +1,24 @@
 # dotfiles 
 
-## install
+## install debian >12
+
+### change sources.list to sid/unstable
+
+`vi /etc/apt/sources.list`
+
+`
+deb http://deb.debian.org/debian/ unstable main non-free-firmware contrib
+deb-src http://deb.debian.org/debian/ unstable main non-free-firmware contrib
+`
+
+`apt update`
+`apt upgrade`
+
+## generate new ssh key
+
+`ssh-keygen -t ed25519 -C "your_email@example.com`
+
+## install basic deps
 
 `apt install git`
 
