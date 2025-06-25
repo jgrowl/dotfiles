@@ -28,7 +28,7 @@ deb-src http://deb.debian.org/debian/ unstable main non-free-firmware contrib
 # Note: Need to test this more. Can fail if env var does not get set write or if git is not installed!
 # TODO: Write a script to do this 
 
-`GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply git@github.com:$GITHUB_USERNAME/dotfiles.git`
+env `GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply git@github.com:$GITHUB_USERNAME/dotfiles.git`
 
 #`GITHUB_USERNAME='jgrowl' sh -c '~/.local/bin/chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git'`
 
