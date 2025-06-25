@@ -6,10 +6,10 @@
 
 `vi /etc/apt/sources.list`
 
-`
-deb http://deb.debian.org/debian/ unstable main non-free-firmware contrib
-deb-src http://deb.debian.org/debian/ unstable main non-free-firmware contrib
-`
+    # Sid/unstable
+    deb http://deb.debian.org/debian/ unstable main contrib non-free non-free-firmware
+    deb-src http://deb.debian.org/debian/ unstable main contrib non-free
+
 
 `apt update`
 `apt upgrade`
