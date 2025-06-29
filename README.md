@@ -26,7 +26,20 @@ env `GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --ap
 
 ## dependencies
 
+### powerline
+
+`apt install powerline fonts-powerline`
+
+###  Ulauncher
+
+https://ulauncher.io/#Download
+https://github.com/Ulauncher/Ulauncher/releases/tag/v6.0.0-beta19
+
 ### tmux
+
+If catppuccin isn't loaded, then install by 
+
+`Ctrl+B` then `I`
 
 https://tmuxcheatsheet.com/
 

@@ -169,9 +169,12 @@ export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 export PATH="$HOME/.cargo/bin:$PATH" # RUST
+export PATH="/usr/local/go/bin:$PATH" # GOLANG
+
 
 # Make virtualbox use wayland 
-#export QT_QPA_PLATFORM="wayland"
+export QT_QPA_PLATFORM="wayland"
+export GDK_BACKEND="wayland"
 
 
 #export PATH="$PATH:/opt/yazi/bin" # OPT yazi

@@ -99,6 +99,7 @@ output DP-1 resolution 2560x1440 position 2560,1080
     bindsym $mod+Shift+Ctrl+n exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf
     bindsym $mod+Shift+Ctrl+p exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf -private
     bindsym $mod+Print exec grimshot save output
+    bindsym $mod+Shift+Ctrl+space exec GDK_BACKEND=wayland ulauncher
 
 
 #
@@ -255,5 +256,7 @@ bar {
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
 }
+
+for_window [app_id="ulauncher"] border none
 
 include /etc/sway/config.d/*
