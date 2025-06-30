@@ -25,4 +25,3 @@ fi
 # skip this when using zim
 skip_global_compinit=1
 
-
