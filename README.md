@@ -26,6 +26,11 @@ env `GITHUB_USERNAME=jgrowl sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --ap
 
 ## dependencies
 
+### tpm
+
+`mkdir -p ~/.tmux/plugins`
+`git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm`
+
 ### powerline
 
 `apt install powerline fonts-powerline`
