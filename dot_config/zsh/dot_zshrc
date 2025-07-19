@@ -177,6 +177,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     # Make virtualbox use wayland 
     export QT_QPA_PLATFORM="wayland"
     export GDK_BACKEND="wayland"
+    export XDG_SESSION_TYPE="wayland"
+    export WAYLAND_DISPLAY="wayland-1"
+    export OXIDE_PREFER_WAYLAND=1
 
     export PATH="/usr/local/go/bin:$PATH" # GOLANG
 
