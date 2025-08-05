@@ -95,7 +95,7 @@ exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-assign.s
 
   #timeout 300 'swaylock -f -c 000000' \
   #timeout 600 'swaymsg "output * dpms off"' \
-exec_always swayidle -w timeout 10 'swaylock -f -c 000000' timeout 20 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -c 000000'
+#exec_always swayidle -w timeout 10 'swaylock -f -c 000000' timeout 20 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -c 000000'
 
 
 #exec_always ~/.config/sway/scripts/start-swayidle.sh
