@@ -67,6 +67,8 @@ https://zimfw.sh/
 
 ### sesh
 
+You have to go to download a release on github or otherwise aquire it. Download, decompress, link in a ~/.local/.bin directory
+
 https://github.com/joshmedeski/sesh
 
 inside zsh:  Ctrl+s
