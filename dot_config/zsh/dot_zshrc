@@ -159,6 +159,12 @@ compdef _.d .d
 _.s() { _files -W $DOTFILESSCRIPTSDIR/ -/; }
 compdef _.s .s
 
+gp-nvim() {
+  export OPENAI_API_KEY=$(op read "op://Private/ChatGPT/api_key")
+  nvim "$@"
+}
+
+
 # autocorrect is more annoying than helpful
 #unsetopt correct_all
 
@@ -178,22 +184,34 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     export QT_QPA_PLATFORM="wayland"
     export GDK_BACKEND="wayland"
     export XDG_SESSION_TYPE="wayland"
-    export WAYLAND_DISPLAY="wayland-1"
+    # You don't want to set this manually or else sway will fail to load from tty
+    #export WAYLAND_DISPLAY="wayland-1"
     export OXIDE_PREFER_WAYLAND=1
 
-    export PATH="/usr/local/go/bin:$PATH" # GOLANG
 
-    export PATH="$HOME/.cargo/bin:$PATH" # RUST
-    . "$HOME/.cargo/env"  # Does this need to be in zshenv?
+    # This option might be making cs2 lag. 
+    #export STEAM_USE_WAYLAND=1
 
     # Go
     #export PATH=$PATH:/usr/local/go/bin:$PATH 
+    export PATH="/usr/local/go/bin:$PATH" # GOLANG
 
     # Rust
     #export PATH=$HOME/.cargo/bin:$PATH
+    export PATH="$HOME/.cargo/bin:$PATH" # RUST
+    . "$HOME/.cargo/env"  # Does this need to be in zshenv?
 
     # OPT NEOVIM
     export PATH="$PATH:/opt/nvim-linux-x86_64/bin" 
+
+    # For older versions of python, custom install
+    # curl https://pyenv.run | bash
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init --path)"
+
+
+
+
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     #RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src
     #export RUST_SRC_PATH

@@ -228,6 +228,10 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
+
+  -- { 'robitx/gp.nvim', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { import = 'plugins' }, -- loads ALL plugin specs in plugins/*.lua
+
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
