@@ -10,14 +10,26 @@ return {
       return
     end
 
+    local model = 'gpt-4o'
+
+    -- Optional pretty name for display in chat header
+    local model_pretty = ({
+      ['gpt-4o'] = 'ChatGPT-o3',
+      ['gpt-4'] = 'ChatGPT-4',
+      ['gpt-3.5-turbo'] = 'ChatGPT-3.5',
+      ['gpt-4-0613'] = 'ChatGPT-4 (0613)',
+    })[model] or model
+
     gp.setup {
       openai_api_key = os.getenv 'OPENAI_API_KEY',
+      -- gpt-4, gpt-4, gpt-3.5-turbo, gpt-4-0613
+      model = model, -- or "gpt-4" if you want GPT-4 legacy
     }
 
     local function get_project_patterns()
       local ft = vim.bo.filetype
       local patterns = {
-        rust = { 'Cargo.toml', 'Readme.md', '*.md', 'src/**/*.rs' },
+        rust = { 'Cargo.toml', 'Readme.md', '*.md', 'src/**/*.rs', 'src/*.rs' },
         lua = { '*.lua' },
         python = { '*.py', 'pyproject.toml', 'requirements.txt' },
         javascript = { '*.js', '*.ts', 'package.json' },
@@ -65,7 +77,7 @@ return {
         local filename = vim.api.nvim_buf_get_name(buf):match '([^/]+)$' or 'project.md'
 
         local header = {
-          '# topic: ?                                                                                                               Current Agent: [ChatGPT-o3-mini]',
+          '# topic: ?',
           '',
           ('- file: %s'):format(filename),
           '',
