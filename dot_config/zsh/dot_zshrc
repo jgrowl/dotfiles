@@ -206,8 +206,13 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
 
     # For older versions of python, custom install
     # curl https://pyenv.run | bash
+    #export PATH="$HOME/.pyenv/bin:$PATH"
+    #eval "$(pyenv init --path)"
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+
 
 
 
