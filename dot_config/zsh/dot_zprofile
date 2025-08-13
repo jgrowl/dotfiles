@@ -6,10 +6,24 @@
 #
 # Platform specific variables
 if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific 
-    # This will start sway automatically when I boot up debian for the first time.
-    if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-      exec sway
+
+    ## I am turning this off temporarily so I can access shell for nvidia drivers.
+    ## This will start sway automatically when I boot up debian for the first time.
+    #if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+    #  exec sway
+    #fi
+    #
+    #
+    # Auto-start sway only once per boot on first TTY login
+    if [[ -z $SSH_CONNECTION && -z $DISPLAY && -z $WAYLAND_DISPLAY && ${XDG_VTNR:-0} -eq 1 ]]; then
+      marker="${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-autostarted-this-boot"
+      if [[ ! -e "$marker" ]]; then
+        mkdir -p "${marker%/*}"
+        : > "$marker"          # create the stamp file
+        exec sway              # replace the login shell with sway
+      fi
     fi
+
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   export BROWSER='open'
