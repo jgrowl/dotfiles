@@ -1,0 +1,27 @@
+# Can't get pictures to work?
+#image=/home/jon/Pictures/wallpaper.png
+# solid dark background
+color=0f1117
+
+# show indicator before typing
+indicator-idle-visible
+indicator-radius=120
+indicator-thickness=10
+
+# colors
+inside-color=00000066
+line-color=00000000
+ring-color=3b82f6
+key-hl-color=22c55e
+bs-hl-color=ef4444
+separator-color=00000000
+
+# text
+text-color=ffffff
+font=Inter
+font-size=20
+
+# indicator-x-position=0
+# indicator-y-position=120
+
+show-failed-attempts
