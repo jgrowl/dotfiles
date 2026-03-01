@@ -1,0 +1,55 @@
+/* === Base window === */
+window {
+  margin: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background-color: rgba(20, 22, 26, 0.9); /* translucent dark */
+}
+
+/* Outer/inner boxes control spacing */
+#outer-box { padding: 14px; }
+#inner-box { padding-top: 8px; }
+
+/* Input field */
+#input {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background-color: rgba(255,255,255,0.06);
+  color: #eaeaea;
+  caret-color: #eaeaea;
+  box-shadow: none;
+}
+
+/* List area */
+#scroll { margin-top: 10px; }
+#entry {
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 2px 0;
+  color: #d6d6d6;
+}
+
+/* Icon + text alignment */
+#img {
+  margin-right: 10px;
+  min-width: 22px;
+  min-height: 22px;
+}
+#text {
+  font-size: 14px;
+}
+
+/* Selected row */
+#entry:selected {
+  background-color: rgba(120, 160, 255, 0.18);
+  outline: 2px solid rgba(120, 160, 255, 0.35);
+  color: #ffffff;
+}
+
+/* Optional: hide the “no results” border pop */
+#no-results {
+  background: transparent;
+  color: #aaaaaa;
+  padding: 10px;
+}

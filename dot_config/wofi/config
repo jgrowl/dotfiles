@@ -1,0 +1,6 @@
+insensitive=true
+# optional:
+matching=fuzzy   # or: contains | strict-contains | multi-contains
+
+gtk_dark=true
+
