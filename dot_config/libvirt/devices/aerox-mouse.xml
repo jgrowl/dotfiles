@@ -1,0 +1,22 @@
+
+<!-- 
+☺ lsusb -d 1038:
+Bus 001 Device 011: ID 1038:183a SteelSeries ApS SteelSeries Aerox 3 Wireless
+Bus 003 Device 004: ID 1038:1838 SteelSeries ApS SteelSeries Aerox 3 Wireless
+
+Bus 001 Device 017: ID 1038:1290 SteelSeries ApS Arctis Pro Wireless
+Bus 001 Device 018: ID 1038:1294 SteelSeries ApS Arctis Pro Wireless
+
+Bus 005 Device 017: ID 1038:1290 SteelSeries ApS Arctis Pro Wireless
+Bus 005 Device 016: ID 1038:1294 SteelSeries ApS Arctis Pro Wireless
+-->
+
+
+<!-- SteelSeries Aerox 3 Wireless (USB ID 1038:183a) -->
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source>
+    <vendor id='0x1038'/>
+    <product id='0x183a'/>
+  </source>
+</hostdev>
+

@@ -1,0 +1,18 @@
+# [opener]
+# edit  = [{ run = 'nvr --remote "$@"',        block = false, desc = "Edit in current window" }]
+# split = [{ run = 'nvr --remote-split "$@"',  block = false, desc = "Edit in split" }]
+# vsplit= [{ run = 'nvr --remote-vsplit "$@"', block = false, desc = "Edit in vsplit" }]
+# tab   = [{ run = 'nvr --remote-tab "$@"',    block = false, desc = "Edit in tab" }]
+# 
+# [open]
+# rules = [
+#   { name = "*/", use = "default" },
+#   { mime = "text/*", use = "edit" },
+#   { mime = "inode/x-empty", use = "edit" },
+# ]
+# [manager]
+# "e" = "open --with edit"
+# "s" = "open --with split"
+# "v" = "open --with vsplit"
+# "t" = "open --with tab"
+#  

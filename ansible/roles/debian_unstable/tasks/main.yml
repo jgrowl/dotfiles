@@ -1,0 +1,14 @@
+---
+- name: Refresh apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install base packages
+  ansible.builtin.apt:
+    name: "{{ apt_packages | default(['build-essential','curl','git','vim','htop']) }}"
+    state: present
+    install_recommends: yes
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+

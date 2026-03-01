@@ -1,0 +1,95 @@
+* { font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free", Inter, Noto Sans, sans-serif; font-size: 20px;}
+
+/* Workspace pill styling */
+#workspaces {
+  padding: 0 6px;
+}
+
+window#waybar {
+  background: #0f1117; /* near-black */
+  color: #e5e7eb;      /* light gray text */
+  border-bottom: 1px solid rgba(59,130,246,0.12); /* subtle blue line */
+}
+
+#workspaces button {
+  font-size: 16px;          /* bigger numbers */
+  min-width: 28px;          /* wider hit area */
+  padding: 0 12px;
+  margin: 0 4px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;           /* inactive text */
+}
+/* Focused workspace: bright text + blue outline */
+#workspaces button.focused {
+  color: #ffffff;
+  background: #111827;                 /* dark pill */
+  border-color: #3b82f6;               /* blue border */
+  box-shadow: inset 0 0 0 2px rgba(59,130,246,0.35);
+}
+/* Visible (on another output) */
+#workspaces button.visible:not(.focused) {
+  color: #e5e7eb;
+  background: #0b1220;
+  border-color: #334155;
+}
+
+/* Urgent workspace */
+#workspaces button.urgent {
+  color: #ffffff;
+  background: #1f2937;
+  border-color: #ef4444;
+}
+
+/* Hover */
+#workspaces button:hover {
+  background: #0b1220;
+  color: #e5e7eb;
+}
+
+#workspaces button.active {
+  color: #ffffff;
+  background: #111827;
+  border-bottom: 2px solid #3b82f6; /* blue accent */
+}
+#workspaces button.urgent { background: #1f2937; color: #ffffff; border-bottom: 2px solid #ef4444; }
+#workspaces button:hover { background: #0b1220; color: #e5e7eb; }
+
+/* Optional: slightly larger icons look nicer at this size */
+#tray { -gtk-icon-transform: scale(1.1); }
+
+/* Monitor button spacing & look */
+#custom-displays {
+  padding: 0 10px;      /* space inside the button */
+  margin: 0 6px;        /* space around the button */
+  min-width: 24px;      /* keeps it from collapsing */
+  font-size: 14px;      /* optional: tweak icon size */
+  /* border-radius: 6px; background: rgba(255,255,255,0.05);  // optional styling */
+}
+
+
+#custom-displays, #pulseaudio, #network, #cpu, #memory, #battery, #clock, #tray {
+  padding: 0 12px;
+}
+
+#clock { color: #e5e7eb; }
+#pulseaudio { color: #60a5fa; }  /* blue */
+#network { color: #7aa2f7; }
+#cpu { color: #a78bfa; }         /* violet */
+#memory { color: #f59e0b; }      /* amber */
+#battery { color: #22c55e; }     /* green */
+#battery.warning { color: #f59e0b; }
+#battery.critical { color: #ef4444; }
+
+
+#custom-vm_usb_office.active,
+#custom-vm_usb_bedroom.active {
+  color: #8be9fd;
+  text-shadow: 0 0 6px rgba(139,233,253,0.8);
+}
+
+#custom-vm_usb_office.inactive,
+#custom-vm_usb_bedroom.inactive {
+  opacity: 0.5;
+}

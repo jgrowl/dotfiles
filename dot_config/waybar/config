@@ -1,0 +1,68 @@
+{
+	"layer": "bottom",
+		"position": "top",
+		"exclusive": true,
+		"height": 30,
+
+		"modules-left": ["sway/workspaces", "sway/mode"],
+		"modules-center": ["sway/window"],
+		"modules-right": [
+			"custom/displays", "pulseaudio", "network", "cpu", "memory", "battery", "clock", "tray"],
+			"sway/workspaces": {
+				"format": "{index}",            // show 1,2,3...
+				"disable-scroll": true,
+				"sort-by-number": true
+			},
+			"sway/window": {
+				"format": "{title}",
+				"max-length": 80,           // truncate with ellipsis if long
+
+				"rewrite": {
+					"^([^@]+)@([^:]+):[[:space:]]*(.*)$": "$3",
+					"[[:space:]]+[-—][[:space:]]+(kitty|foot|Alacritty)$": "",
+					"\\s*[\\-–—‒−]\\s*LibreOffice$": "",
+					"^(.*?)[ \\u00A0\\u2009\\u202F—–-]+(?:LibreWolf|Mozilla Firefox|Chromium|Google Chrome|Brave|Vivaldi)[ \\u00A0\\u2009\\u202F—–-]*$": "$1"
+				},
+				"tooltip": true,
+				"separate-outputs": true
+			},
+
+			"clock": { "format": "{:%Y-%m-%d  %H:%M:%S}" },
+
+
+			// NEW: monitor icon that opens wdisplays
+			"custom/displays": {
+				"format": "",                 // try "󰍺" or "🖥️" if you prefer
+				"tooltip": "Display settings",
+				"on-click": "/home/jon/.local/share/chezmoi/scripts/toggle-wdisplays",
+				"interval": 0                  // static icon; no polling
+			},
+
+			"pulseaudio": {
+				"format": "{icon} {volume}%",
+				"format-muted": " {volume}%",
+				"format-icons": { "default": ["","",""] },
+				"scroll-step": 2,
+				"on-click-release": "/home/jon/.local/share/chezmoi/scripts/toggle-pwvucontrol",
+				"on-click-right-release": "/home/jon/.local/share/chezmoi/scripts/toggle-helvum",
+			},
+
+			"network": {
+				"format-wifi": " {essid} {signalStrength}%",
+				"format-ethernet": " {ipaddr}",
+				"format-disconnected": "",
+				"tooltip": true
+			},
+
+			"cpu": { "format": " {usage}%" },
+			"memory": { "format": "🧠 {used}GiB" },
+			"battery": {
+				"format": "{icon} {capacity}%",
+				"format-alt": "{time}",
+				"states": { "warning": 25, "critical": 10 },
+				"format-icons": ["","","","",""]
+			},
+
+			"tray": { "icon-size": 28, "spacing": 8 }
+}
+

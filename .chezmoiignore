@@ -3,3 +3,6 @@ INSTALL.md
 lib
 custom
 scripts
+ansible/**
+ignore
+old

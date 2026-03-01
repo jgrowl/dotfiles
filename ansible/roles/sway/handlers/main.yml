@@ -1,0 +1,19 @@
+# - name: Reload systemd
+#   become: true
+#   command: systemctl daemon-reload
+# 
+# - name: Restart sway instance
+#   command: systemctl restart "sway-tty1@{{ sway_user }}.service"
+#   become: true
+
+- name: Reload systemd
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Restart sway on tty1
+  become: true
+  systemd:
+    name: "sway-tty1@{{ sway_user }}.service"
+    state: restarted
+

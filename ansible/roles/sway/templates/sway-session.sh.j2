@@ -1,0 +1,64 @@
+#!/bin/sh
+# ~/.local/bin/sway-session
+# robust launcher for systemd system unit with User=jon
+
+# THE OVERLORD SAYS
+
+# basic env
+export XDG_SESSION_TYPE=wayland
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export XDG_CURRENT_DESKTOP=sway
+
+wait_for_sockets() {
+  i=0
+  while [ "$i" -lt 50 ]; do
+    wl_sock="${WAYLAND_DISPLAY:-}"
+    [ -n "$wl_sock" ] || wl_sock="$(basename "$(ls "$XDG_RUNTIME_DIR"/wayland-* 2>/dev/null | head -n1 || true)")"
+
+    sw_sock="${SWAYSOCK:-}"
+    [ -n "$sw_sock" ] || sw_sock="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock 2>/dev/null | head -n1 || true)"
+
+    if [ -n "$wl_sock" ] && [ -n "$sw_sock" ] \
+       && [ -S "$XDG_RUNTIME_DIR/$wl_sock" ] && [ -S "$sw_sock" ]; then
+      # try IPC but do not fail hard
+      if command -v swaymsg >/dev/null 2>&1; then
+        if SWAYSOCK="$sw_sock" swaymsg -t get_version >/dev/null 2>&1; then
+          export WAYLAND_DISPLAY="$wl_sock"
+          export SWAYSOCK="$sw_sock"
+          return 0
+        fi
+      else
+        # swaymsg not found, just trust sockets
+        export WAYLAND_DISPLAY="$wl_sock"
+        export SWAYSOCK="$sw_sock"
+        return 0
+      fi
+    fi
+    i=$((i+1))
+    sleep 0.2
+  done
+  return 1
+}
+
+# background helper, but NEVER crash main sway if this fails
+(
+  if wait_for_sockets; then
+    systemctl --user import-environment \
+      WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR 2>/dev/null || true
+    systemctl --user start sway-session.target 2>/dev/null || true
+  fi
+) &
+
+#exec /usr/bin/sway --unsupported-gpu
+
+#export WLR_DRM_DEVICES=/dev/dri/by-path/pci-0000:0e:00.0-card
+export WLR_DRM_DEVICES=/dev/dri/by-path/pci-0000:0e:00.0-card
+export WLR_DRM_DEVICES=/dev/dri/card0
+exec /usr/bin/sway --unsupported-gpu
+
+#exec /usr/bin/sway --unsupported-gpu --drm-device /dev/dri/card0
+
+
+
+
+

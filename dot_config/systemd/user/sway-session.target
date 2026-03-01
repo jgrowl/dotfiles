@@ -1,0 +1,9 @@
+[Unit]
+Description=Sway graphical session (user)
+Requires=graphical-session.target
+After=graphical-session.target
+
+# Bring these up with the session; add others you want auto-started
+Wants=waybar.service
+Wants=swayidle.service
+

@@ -1,0 +1,7 @@
+# ~/.cargo/config.toml
+[build]
+# # I would like this to work, but every project will compile to the
+# # same directory, whereas I would like nested directories.
+# # Does not look like that can be done this simply.
+#target-dir = "/home/jon/.cargo-target"
+

@@ -1,0 +1,25 @@
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='5' device='8'/></source>
+</hostdev>
+
+
+
+
+
+<!-- bedroom audio -->
+<!--
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='5' device='8'/></source>
+</hostdev>
+-->
+
+
+<!--
+lsusb -s 005: | grep -E '1038:(1290|1294)' | awk '{bn=$2+0; dn=$4; sub(/:/,"",dn);
+  printf "<hostdev mode='\''subsystem'\'' type='\''usb'\'' managed='\''yes'\''>\n  <source><address bus='\''%d'\'' device='\''%d'\''/></source>\n</hostdev>\n\n", bn, dn}'
+
+
+
+
+  -->
+

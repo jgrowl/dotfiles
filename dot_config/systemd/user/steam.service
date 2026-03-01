@@ -1,0 +1,23 @@
+[Unit]
+Description=Steam client
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/games/steam -silent
+Restart=on-failure
+
+## WARNING  If you do this here, steam istelf will use vulkan, but we just want games to. This wouldn't be a problem but it might
+## crash the system if the system tries to sleep or something with the card still being used.
+# # Optional: prime offload or other env
+# Environment=__NV_PRIME_RENDER_OFFLOAD=1
+# Environment=__GLX_VENDOR_LIBRARY_NAME=nvidia
+# Environment=__VK_LAYER_NV_optimus=NVIDIA_only
+# Environment=VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json 
+# Environment=VK_DEVICE_INDEX=1
+
+#Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/games
+
+[Install]
+WantedBy=graphical-session.target

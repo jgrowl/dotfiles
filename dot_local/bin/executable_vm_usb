@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  echo "usage: vm_usb <vmname> attach|detach|toggle <device>" >&2
+  echo "examples:" >&2
+  echo "  vm_usb win10 toggle steelseries_arctis_pro_wireless_office" >&2
+  echo "  vm_usb win10 attach steelseries_arctis_pro_wireless_bedroom" >&2
+  exit 2
+}
+
+# virsh as ARRAY
+VIRSH_BIN="${VIRSH_BIN-$(command -v virsh)}"
+VIRSH_URI="${VIRSH_URI-qemu:///system}"
+VIRSH=( "$VIRSH_BIN" -c "$VIRSH_URI" )
+
+# Args
+VM="${1-}"; ACT="${2-}"; DEV_BASE="${3-}"
+[[ -z "${VM}" || -z "${ACT}" || -z "${DEV_BASE}" ]] && usage
+
+XML_DIR="${HOME}/.config/libvirt/devices"
+XML="${XML_DIR}/${DEV_BASE}.xml"
+[[ -f "${XML}" ]] || { echo "not found: ${XML}" >&2; exit 1; }
+
+# Selector for present()
+get_selector() {
+  local xml="$1"
+  local PORT BUS DEVN
+  PORT="$(sed -n "s/.*address[^>]*port='\([^']\+\)'.*/\1/p" "$xml" | head -n1 || true)"
+  [[ -n "$PORT" ]] && { echo "port='$PORT'"; return; }
+  BUS="$(sed -n "s/.*address[^>]*bus='\([0-9]\+\)'.*/\1/p" "$xml" | head -n1 || true)"
+  DEVN="$(sed -n "s/.*address[^>]*device='\([0-9]\+\)'.*/\1/p" "$xml" | head -n1 || true)"
+  [[ -n "$BUS" && -n "$DEVN" ]] && echo "bus='$BUS' device='$DEVN'" || echo ""
+}
+SEL="$(get_selector "$XML")"
+present() { [[ -n "$SEL" ]] && "${VIRSH[@]}" dumpxml "$VM" | grep -q "$SEL"; }
+
+case "$ACT" in
+  attach)  "${VIRSH[@]}" attach-device "$VM" "$XML" --live ;;
+  detach)  "${VIRSH[@]}" detach-device "$VM" "$XML" --live ;;
+  toggle)
+    if present; then "${VIRSH[@]}" detach-device "$VM" "$XML" --live
+    else              "${VIRSH[@]}" attach-device "$VM" "$XML" --live
+    fi
+    ;;
+  *) usage ;;
+esac
+

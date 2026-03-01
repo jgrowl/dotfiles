@@ -1,0 +1,8 @@
+# Packages to install via apt
+apt_packages:
+  - build-essential
+  - curl
+  - git
+  - vim
+  - htop
+

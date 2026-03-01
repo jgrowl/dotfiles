@@ -1,0 +1,14 @@
+#!/bin/sh
+
+
+# if it changes
+# arecord -l
+# and adjust AUDIODEV=hw:<newcard>,0.
+
+
+SDL_AUDIODRIVER=alsa \
+AUDIODEV=hw:0,0 \
+/usr/local/src/whisper.cpp/build/bin/whisper-stream \
+  -m /usr/local/src/whisper.cpp/models/ggml-base.en.bin \
+  -t 8 --step 500 --length 5000
+

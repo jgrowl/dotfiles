@@ -1,0 +1,46 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+# Default base even if no XDG vars are set
+base="${XDG_SCREENSHOTS_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots}"
+
+# Layout options:
+#   year_only  -> base/YYYY
+#   year_month -> base/YYYY/MM
+#   year_dash  -> base/YYYY-MM
+layout="${GRIMSHOT_DATE_LAYOUT:-year_month}"
+
+action="${1:-}"
+subject="${2:-}"
+file="${3:-}"
+
+if [[ -z "$action" || -z "$subject" ]]; then
+  print -u2 "Usage: grimshot-dated (copy|save|savecopy|check|usage) (active|screen|output|area|window) [FILE|-]"
+  exit 2
+fi
+
+# Auto-generate a FILE only for save/savecopy when FILE not provided
+if [[ ( "$action" == "save" || "$action" == "savecopy" ) && -z "$file" ]]; then
+  year="$(date +%Y)"
+  month="$(date +%m)"
+
+  case "$layout" in
+    year_only)  outdir="$base/$year" ;;
+    year_month) outdir="$base/$year/$month" ;;
+    year_dash)  outdir="$base/$year-$month" ;;
+    *) print -u2 "Unknown GRIMSHOT_DATE_LAYOUT: $layout"; exit 2 ;;
+  esac
+
+  mkdir -p -- "$outdir"
+
+  # Use a portable filename (avoid ':' which appears in ISO strings)
+  stamp="$(date +%Y-%m-%dT%H-%M-%S%z)"
+  file="$outdir/$stamp.png"
+fi
+
+# Forward to grimshot
+if [[ -n "$file" ]]; then
+  exec grimshot "$action" "$subject" "$file"
+else
+  exec grimshot "$action" "$subject"
+fi

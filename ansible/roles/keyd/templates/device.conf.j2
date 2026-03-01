@@ -1,0 +1,8 @@
+# roles/keyd/templates/device.conf.j2
+
+[ids]
+{{ item.vendor }}:{{ item.product }}
+
+[main]
+{{ item.main_section | trim }}
+

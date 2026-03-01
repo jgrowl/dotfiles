@@ -1,0 +1,67 @@
+---
+# roles/keyd/defaults/main.yml
+# Apply changes using following:
+#  sudo keyd.rvaiya reload
+#
+# check what is getting pressed using following
+# sudo keyd.rvaiya monitor
+# sudo journalctl -u keyd -n 50 
+
+keyd_package_name: keyd
+keyd_service_name: keyd
+
+keyd_device_configs:
+  - name: tartarus
+    vendor: "1532"
+    product: "0244"
+    main_section: |
+      leftalt = layer(alternate)
+
+      leftshift = leftcontrol
+      capslock = leftshift
+
+      # # Remap Tartarus number row (1→Esc, 2→1, 3→2, 4→3, 5→4)
+      #1 = 1
+      #2 = 2
+      #3 = 3
+      #4 = 4
+      #5 = 5
+
+      [alternate]
+      1 = esc
+      2 = f1
+      3 = f2
+      4 = f3
+      5 = f4
+
+      tab = t
+      q = y
+      w = u
+      e = i
+      r = o
+
+      capslock = g
+      a = h
+      s = j
+      d = k
+      f = l
+
+      leftshift = v
+      z = b
+      x = n
+      c = m
+
+      # # These are the keys on the keypad normally
+      # q =
+      # w =
+      # e =
+      # r =
+
+      # a =
+      # s = 
+      # d =
+      # f =
+
+      # z =
+      # x =
+      # c =

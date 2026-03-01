@@ -1,6 +1,21 @@
 # dotfiles 
 
+
+# When you want to run ansible and don't want to jump into another tty. You'll need this because Privileges have been turned off for sway session
+# This was primarily to make steam happy because the container thing complained that it was too open.
+
+systemd-run --user -p NoNewPrivileges=no --pty /bin/bash
+
+
+
+## Defaults, Keys, Assumptions
+
+See sway config for bindings
+
+
 ## install debian >12
+
+### lazy.nvim
 
 ### change sources.list to sid/unstable
 
@@ -74,6 +89,54 @@ https://github.com/joshmedeski/sesh
 inside zsh:  Ctrl+s
 
 inside tmux: CTRL+b T
+
+### sway
+
+
+# Can be used to verify 
+systemctl --user show-environment | grep -E 'WAYLAND_DISPLAY|XDG_RUNTIME_DIR|SWAYSOCK'
+journalctl --user -u sway-session.target -b
+journalctl --user -u swayidle.service -b
+
+systemctl --user disable --now swayidle.service || true
+pkill -x swayidle || true
+systemctl --user enable --now swayidle.service
+journalctl --user -u swayidle.service -b -n 50
+ps aux | grep '[s]wayidle'
+
+
+
+
+
+
+Used to load sway as a user service, but if it ever crashed, I would be thrown back to a tty and would have to manually restart sway.
+I wanted sway to just load automatically as it is primarily what I use. This meant that I had to turn the sway.service into a system level
+service so that it could properly re-attach to the right tty. 
+
+ansible installed system level sway-tty1.service
+  -> runs sway-service executable
+    -> starts sway-session.target
+      -> waybar.service
+      -> swayidle.service
+         -> sway-start-swayidle.sh
+
+
+# #
+# 1) Produce group_vars/all.yml with your current manual packages
+mkdir -p group_vars
+apt-mark showmanual \
+  | sort -u \
+  | awk 'BEGIN{print "apt_packages:"} {print "  - " $0}' \
+  > group_vars/all.yml
+
+
+
+
+
+### swayidle & swaylock
+
+systemctl --user daemon-reload
+systemctl --user enable --now swayidle.service
 
 
 ### Patched Nerd Fonts

@@ -1,0 +1,39 @@
+[Unit]
+Description=Waybar
+PartOf=sway-session.target
+After=graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=simple
+#ExecStart=/usr/bin/waybar
+ExecStart=%h/.local/bin/start-waybar.sh
+# <-- change these lines:
+Restart=always
+RestartSec=1
+# Optional: prevent flapping if Sway is bouncing
+StartLimitIntervalSec=10
+StartLimitBurst=5
+
+[Install]
+WantedBy=sway-session.target
+
+
+# [Unit]
+# Description=Waybar
+# # After=graphical-session.target
+# # PartOf=graphical-session.target
+# After=sway.service
+# Requires=sway.service
+# PartOf=sway.service
+# 
+# [Service]
+# Type=simple
+# ExecStart=/usr/bin/waybar
+# Restart=on-failure
+# RestartSec=2
+# ExecStartPre=/usr/bin/test -S %t/wayland-0 -o -S %t/wayland-1
+# 
+# [Install]
+# WantedBy=graphical-session.target
+# 

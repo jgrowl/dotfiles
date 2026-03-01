@@ -18,7 +18,10 @@ set $term foot
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | wmenu | xargs swaymsg exec --
+#set $menu dmenu_path | wmenu | xargs swaymsg exec --
+# Make sure wofi can see Flatpak desktop files
+#set $menu wofi --show drun
+set $menu /home/jon/bin/wofi-drun
 
 include /etc/sway/config-vars.d/*
 
@@ -26,58 +29,67 @@ include /etc/sway/config-vars.d/*
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 #output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+#output * bg /home/jon/Pictures/wallpaper.png fill
+
 #
 # Example configuration:
 #
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
-
-
-# Bottom Left
-# Output DP-6 'LG Electronics LG ULTRAGEAR 310NTABB2240'
-# 2560x1440 @ 143.973 Hz
-#output DP-6 resolution 2560x1440 position 0,1080
-
 # DP-3 = LG Electronics LG ULTRAGEAR (serial: 310NTABB2240)
-output DP-3 resolution 2560x1440 position 0,1080
+output DP-3 adaptive_sync on resolution 2560x1440 position 2560,1080
 workspace 1 output DP-3
-
-
-# Bottom Right
-# DP-4 'Unknown Unknown Unknown'
-#output DP-4 resolution 2560x1440 position 0,2560
-#output DP-4 resolution 800x600 position 2560,1440
-#output DP-4 resolution 640x480 position 2560,1080
-
 # DP-1 = LG Electronics LG ULTRAGEAR (serial: 410NTWG86233)
-output DP-1 resolution 2560x1440 position 2560,1080
+output DP-1 adaptive_sync on resolution 2560x1440 position 5120,1080
 workspace 2 output DP-1
 #output DP-4 disable 
 
-# Top Left
-# HDMI-A-2 'Ancor Communications Inc VS278 E1LMQS012796'
-#output HDMI-A-2 resolution 1920x1080 position 1440,2560
-#output HDMI-A-2 disable 
-#output HDMI-A-2 resolution 1920x1080 position 0,0
-
-# HDMI-A-1 = Ancor Communications Inc VS278 (serial: E1LMQS012796)
-output HDMI-A-1 resolution 1920x1080 position 0,0
+output HDMI-A-1 resolution 2560x1440 position 0,1080
 workspace 3 output HDMI-A-1
 
-# Top Right
-# (Shows up as DP, but uses HDMI cable with adapter)
-# Output DP-5 'Ancor Communications Inc VS278 FBLMQS084061'
-#output DP-5 resolution 1920x1080 position 4480,1440
-#output DP-5 resolution 1920x1080 position 1920,0
+
+#Output HDMI-A-1 'RST 1to4          0x00000001' (focused)
 
 # DP-2 = Ancor Communications Inc VS278 (serial: FBLMQS084061)
-output DP-2 resolution 1920x1080 position 1920,0
+output DP-2 resolution 1920x1080 position 3800,0
+#output DP-2 resolution 1920x1080 position 1920,0
 workspace 4 output DP-2
+#mouse_warping output
 
 # For Home use with specific monitor setup.
 # If I change graphic cards or something, this should assign to specific monitors
-exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-assign.sh
+#exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-assign.sh
+
+#exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_RUNTIME_DIR XDG_SESSION_TYPE; systemctl --user restart swayidle.service
+#exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_RUNTIME_DIR XDG_SESSION_TYPE; systemctl --user start swayidle.service
+
+# This is necessary to ensure that sway is fully initialized. If this step is not done, then waybar will still load
+# but it will be missing the display numbers.
+# It might be worth setting RestartSec=2 or increase loop count in the script
+#exec_always systemctl --user restart waybar.service
+
+# Make Sway's env visible to systemd --user
+#exec_always systemctl --user import-environment \
+#  WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+
+exec_always {
+    systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+    #systemctl --user start graphical-session.target
+    systemctl --user restart graphical-session.target
+
+    # Kick off your user-session target (waybar, clipman, etc. hang off this)
+    #systemctl --user start sway-session.target
+    systemctl --user restart sway-session.target
+
+    systemctl --user restart swayidle.service
+    systemctl --user restart waybar.service
+
+
+    systemctl --user restart discord.service
+    systemctl --user restart steam.service
+}
+
 
 
 ### Idle configuration
@@ -92,15 +104,9 @@ exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-assign.s
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
-
-  #timeout 300 'swaylock -f -c 000000' \
-  #timeout 600 'swaymsg "output * dpms off"' \
-#exec_always swayidle -w timeout 10 'swaylock -f -c 000000' timeout 20 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -c 000000'
-
-
 #exec_always ~/.config/sway/scripts/start-swayidle.sh
-
-exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-start-swayidle.sh
+#exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-start-swayidle.sh
+## NOTE: Nothing to do here. There is a systemd swayidle service that handles swayidle
 
 ### Input configuration
 #
@@ -115,15 +121,53 @@ exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-start-sw
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
+input * {
+    xkb_options ctrl:nocaps
+}
 
 ### Key bindings
 #
 # Customs:
 #
+
+    # Open common programs like browser
     bindsym $mod+Shift+Ctrl+n exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf
     bindsym $mod+Shift+Ctrl+p exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf -private
-    bindsym $mod+Print exec grimshot save output
-    bindsym $mod+Shift+Ctrl+space exec GDK_BACKEND=wayland ulauncher
+
+    # Take a screenshot
+    # bindsym $mod+Print exec grimshot save output
+    # bindsym $mod+Shift+Ctrl+Print exec grimshot save area
+    bindsym $mod+Print exec ~/.local/bin/grimshot-dated save output
+    bindsym $mod+Shift+Ctrl+Print exec ~/.local/bin/grimshot-dated save area
+
+    #bindsym $mod+Shift+Ctrl+space exec GDK_BACKEND=wayland ulauncher-toggle --no-extensions
+
+    # Lock the system with password
+    bindsym $mod+Shift+Ctrl+l exec /usr/bin/swaylock -C /home/jon/.config/swaylock/config
+
+
+    # # TODO: This script doesn't release the mouse properly
+    # # Toggle Aerox mouse between host and VM
+    # bindsym $mod+Shift+Ctrl+n exec --no-startup-id /home/jon/.local/share/chezmoi/scripts/toggle-vm-mouse.sh
+
+
+     # Attach Aerox to VM
+     #bindsym $mod+Shift+m exec --no-startup-id virsh -c qemu:///system attach-device win10 /home/jon/.config/libvirt/devices/aerox-mouse.xml --live
+
+     # Detach Aerox (give it back to host)
+     #bindsym $mod+Shift+u exec --no-startup-id virsh -c qemu:///system detach-device win10 /home/jon/.config/libvirt/devices/aerox-mouse.xml --live
+
+
+    # This section lets me turn off super key capture on my host for when I am doing super actions on another matching with a client.
+    mode "passthrough" {
+        # Press $mod+Pause again to exit
+        bindsym $mod+Pause mode "default"
+    }
+
+    # Toggle passthrough with $mod+Pause
+    bindsym $mod+Pause mode "passthrough"
+
+
 
 
 #
@@ -131,6 +175,12 @@ exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-start-sw
 #
     # Start a terminal
     bindsym $mod+Return exec $term
+
+    # Start a tmux terminal
+    bindsym $mod+Ctrl+Shift+Return exec $term -e tmux new -As main
+
+    # Start a tmux terminal for dotfiles
+    bindsym $mod+Ctrl+Alt+Shift+Return exec $term -e /home/jon/.local/share/chezmoi/scripts/tmux-dotfiles.sh
 
     # Kill focused window
     bindsym $mod+Shift+q kill
@@ -263,24 +313,87 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-#
-# Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
+# Minimal chrome: no titlebars, visible focus border
+default_border pixel 2
+default_floating_border pixel 2
+hide_edge_borders smart
+smart_gaps on
+gaps inner 3
+gaps outer 3
 
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+# Colors: border  bg       text     indicator child_border
+client.focused          #22d3ee #0b1220 #ffffff #22d3ee #22d3ee
+client.focused_inactive #334155 #0f172a #e5e7eb #334155 #334155
+client.unfocused        #111318 #111318 #94a3b8 #111318 #111318
+client.urgent           #ef4444 #1f2937 #ffffff #ef4444 #ef4444
+client.placeholder      #111827 #111827 #e5e7eb #111827 #111827
 
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-}
 
 for_window [app_id="ulauncher"] border none
 
+#for_window [app_id="looking-glass-client"] idle_inhibit focus border none
+
+# Inhibit only while focused (lighter)
+for_window [app_id="looking-glass-client"] idle_inhibit focus
+
+# Inhibit while fullscreen (great for games)
+for_window [app_id="looking-glass-client"] idle_inhibit fullscreen
+
+# Always inhibit whenever LG exists (strongest)
+# for_window [app_id="looking-glass-client"] idle_inhibit always
+
+#for_window [class=".*"] border none
+
+#for_window [class="discord"] move to output DP-2
+assign [class="discord"] output DP-2
+
+
+# # # This is to fix a cs:go vulkcan screen resizing error. Use windowed mode in game, don't use fullscreen in sway, but just hide bars
+# # # remove borders for CS2
+# # for_window [class="cs2"] border none
+# # # (optional) also remove titlebar if you use titlebars anywhere
+# # for_window [class="cs2"] title_format ""
+# # #for_window [class="cs2"] floating disable
+
+
+# Double check if this is necessary:. I think I tried doing this to keep my mouse hovering over youtube volume control and it changing volume
+# even though I was not clicking
+input "type:mouse" {
+    accel_profile flat
+    pointer_accel 0
+}
+
+
+
 include /etc/sway/config.d/*
+
+
+# # This is my old configuration with different monitor layout
+# Bottom Left
+# Output DP-6 'LG Electronics LG ULTRAGEAR 310NTABB2240'
+# 2560x1440 @ 143.973 Hz
+#output DP-6 resolution 2560x1440 position 0,1080
+
+# Bottom Right
+# DP-4 'Unknown Unknown Unknown'
+#output DP-4 resolution 2560x1440 position 0,2560
+#output DP-4 resolution 800x600 position 2560,1440
+#output DP-4 resolution 640x480 position 2560,1080
+
+# Top Left
+# HDMI-A-2 'Ancor Communications Inc VS278 E1LMQS012796'
+#output HDMI-A-2 resolution 1920x1080 position 1440,2560
+#output HDMI-A-2 disable 
+#output HDMI-A-2 resolution 1920x1080 position 0,0
+
+# HDMI-A-1 = Ancor Communications Inc VS278 (serial: E1LMQS012796)
+#output HDMI-A-1 resolution 1920x1080 position 0,0
+
+# Top Right
+# (Shows up as DP, but uses HDMI cable with adapter)
+# Output DP-5 'Ancor Communications Inc VS278 FBLMQS084061'
+#output DP-5 resolution 1920x1080 position 4480,1440
+#output DP-5 resolution 1920x1080 position 1920,0
+
+
+

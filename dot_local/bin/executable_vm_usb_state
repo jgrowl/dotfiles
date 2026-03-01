@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+VM="${1:?}"; LABEL="${2:?}"; shift 2
+XML_DIR="${HOME}/.config/libvirt/devices"
+
+present_xml() {
+  local xml="$1"
+  local sel port bus dev
+  [[ -f "$xml" ]] || return 1
+  port="$(sed -n "s/.*address[^>]*port='\([^']\+\)'.*/\1/p" "$xml" | head -n1 || true)"
+  if [[ -n "$port" ]]; then sel="port='$port'"
+  else
+    bus="$(sed -n "s/.*address[^>]*bus='\([0-9]\+\)'.*/\1/p" "$xml" | head -n1 || true)"
+    dev="$(sed -n "s/.*address[^>]*device='\([0-9]\+\)'.*/\1/p" "$xml" | head -n1 || true)"
+    [[ -n "$bus" && -n "$dev" ]] && sel="bus='$bus' device='$dev'" || sel=""
+  fi
+  [[ -n "$sel" ]] && virsh -c qemu:///system dumpxml "$VM" 2>/dev/null | grep -q "$sel"
+}
+
+state="active"
+for dev in "$@"; do
+  xml="${XML_DIR}/${dev}.xml"
+  if ! present_xml "$xml"; then state="inactive"; break; fi
+done
+
+# Waybar JSON
+if [[ "$state" = active ]]; then
+  echo "{\"text\":\"$LABEL\",\"class\":\"active\",\"tooltip\":\"$LABEL attached\"}"
+else
+  echo "{\"text\":\"$LABEL\",\"class\":\"inactive\",\"tooltip\":\"$LABEL detached\"}"
+fi
+

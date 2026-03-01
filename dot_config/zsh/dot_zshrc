@@ -160,8 +160,51 @@ _.s() { _files -W $DOTFILESSCRIPTSDIR/ -/; }
 compdef _.s .s
 
 gp-nvim() {
-  export OPENAI_API_KEY=$(op read "op://Private/ChatGPT/api_key")
+  export AVANTE_OPENAI_API_KEY=$(op read "op://Private/ChatGPT/avante")
+
   nvim "$@"
+}
+
+# This command just puts the outputs of the compiled code into a shared folder
+# instead of the path in which the project resides
+# Look in $HOME/.cargo-target
+.cargo() {
+  local root name slug
+  root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+  name="$(basename "$root")"
+  # hash avoids collisions for same-named projects in different paths
+  slug="${name}-$(printf '%s' "$root" | sha1sum | cut -c1-8)"
+  CARGO_TARGET_DIR="$HOME/.cargo-target/$slug" command cargo "$@"
+}
+
+##  For getting filename/paths in titlebar under tmux.
+function _title_precmd() {
+  # If something (like nvim) sets a title, it will overwrite this while running.
+  print -Pn "\e]0;%~\a"
+}
+precmd_functions+=(_title_precmd)
+
+
+## Add new commands here!
+
+
+# To run ollama with GPU support, use the following alias.
+# It is also important to unbind from vfio. Use script in scripts folder
+# run `watch -n 1 nvidia-smi` to verify that GPU is being used.
+ollama-run-gpu() {
+  # Find the PID of 'ollama serve' run by your user
+  pid=$(pgrep -u "$USER" -f "/usr/local/bin/ollama serve")
+
+  # If found, kill it
+  if [ -n "$pid" ]; then
+    echo "Killing existing ollama serve process (PID $pid)..."
+    kill "$pid"
+    sleep 1
+  fi
+
+  # Start a new ollama run with GPU enabled
+  echo "Starting ollama with GPU..."
+  OLLAMA_USE_CUDA=1 OLLAMA_DEBUG=1 ollama run "$@"
 }
 
 
@@ -188,6 +231,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     #export WAYLAND_DISPLAY="wayland-1"
     export OXIDE_PREFER_WAYLAND=1
 
+    # Flatpak
+    export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+    alias discord="flatpak run com.discordapp.Discord"
+    #alias discord='flatpak run --env=ELECTRON_OZONE_PLATFORM_HINT=wayland com.discordapp.Discord --enable-features=UseOzonePlatform --ozone-platform=wayland'
 
     # This option might be making cs2 lag. 
     #export STEAM_USE_WAYLAND=1
@@ -204,6 +251,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     # OPT NEOVIM
     export PATH="$PATH:/opt/nvim-linux-x86_64/bin" 
 
+    # Steam
+    export PATH="$PATH:/usr/games" 
+
+
     # For older versions of python, custom install
     # curl https://pyenv.run | bash
     #export PATH="$HOME/.pyenv/bin:$PATH"
@@ -212,9 +263,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
-
-
-
 
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then

@@ -1,0 +1,85 @@
+
+# ~/.config/systemd/user/swayidle.service
+[Unit]
+Description=swayidle
+PartOf=sway-session.target
+After=sway-session.target
+Requires=sway-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/share/chezmoi/scripts/sway-start-swayidle.sh
+Restart=on-failure
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=sway-session.target
+
+
+
+# [Unit]
+# Description=swayidle
+# PartOf=sway-session.target
+# After=sway-session.target
+# Requires=sway-session.target
+# 
+# [Service]
+# Type=simple
+# # Let the script wait for IPC; do NOT gate on ConditionEnvironment
+# ExecStart=%h/.local/share/chezmoi/scripts/sway-start-swayidle.sh
+# Restart=on-failure
+# StandardOutput=journal
+# StandardError=journal
+# 
+# [Install]
+# WantedBy=sway-session.target
+# 
+# 
+
+
+# # [Unit]
+# # Description=Single-instance swayidle
+# # PartOf=sway-session.target
+# # After=graphical-session.target
+# # ConditionEnvironment=WAYLAND_DISPLAY
+# # 
+# # [Service]
+# # Type=simple
+# # ExecStart=%h/.local/share/chezmoi/scripts/sway-start-swayidle.sh
+# # Restart=on-failure
+# # Environment=SWAYIDLE_LOG=%h/.local/state/swayidle.log
+# # Environment=XDG_SESSION_TYPE=wayland
+# # Environment=SDL_VIDEODRIVER=wayland
+# # Environment=QT_QPA_PLATFORM=wayland
+# # StandardOutput=journal
+# # StandardError=journal
+# # 
+# # [Install]
+# # WantedBy=sway-session.target
+
+
+# # ~/.config/systemd/user/sway.service
+# [Unit]
+# Description=Single-instance swayidle
+# After=sway.service
+# Requires=sway.service
+# PartOf=sway.service
+# 
+# [Service]
+# Type=simple
+# ExecStart=%h/.local/share/chezmoi/scripts/sway-start-swayidle.sh
+# Environment=SWAYIDLE_LOG=%h/.local/state/swayidle.log
+# Environment=XDG_SESSION_TYPE=wayland
+# Environment=SDL_VIDEODRIVER=wayland
+# Environment=QT_QPA_PLATFORM=wayland
+# StandardOutput=journal
+# StandardError=journal
+# KillMode=control-group
+# #KillMode=mixed
+# Restart=on-failure
+# RestartSec=2s
+# 
+# [Install]
+# WantedBy=default.target
+# #WantedBy=graphical-session.target

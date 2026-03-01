@@ -1,0 +1,48 @@
+
+
+
+
+<!-- 
+☺ lsusb -d 1038:
+Bus 001 Device 011: ID 1038:183a SteelSeries ApS SteelSeries Aerox 3 Wireless
+Bus 003 Device 004: ID 1038:1838 SteelSeries ApS SteelSeries Aerox 3 Wireless
+
+Bus 001 Device 017: ID 1038:1290 SteelSeries ApS Arctis Pro Wireless
+Bus 001 Device 018: ID 1038:1294 SteelSeries ApS Arctis Pro Wireless
+
+Bus 005 Device 017: ID 1038:1290 SteelSeries ApS Arctis Pro Wireless
+Bus 005 Device 016: ID 1038:1294 SteelSeries ApS Arctis Pro Wireless
+-->
+
+
+<!-- 
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source>
+    <vendor id='0x1038'/>
+    <product id='0x1294'/>
+  </source>
+</hostdev>
+-->
+
+<!--
+Run this command to get the right block
+
+lsusb -s 001: | grep -E '1038:(1290|1294)' | awk '{bn=$2+0; dn=$4; sub(/:/,"",dn);
+  printf "<hostdev mode='\''subsystem'\'' type='\''usb'\'' managed='\''yes'\''>\n  <source><address bus='\''%d'\'' device='\''%d'\''/></source>\n</hostdev>\n\n", bn, dn}'
+
+
+-->
+
+
+  <hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='1' device='13'/></source>
+</hostdev>
+
+
+
+
+<!--
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='1' device='13'/></source>
+</hostdev>
+-->

@@ -1,0 +1,8 @@
+sway_user: "{{ lookup('env','SUDO_USER') | default(lookup('env','USER'), true) }}"
+sway_home: "/home/{{ sway_user }}"
+sway_session_path: "{{sway_home}}/.local/bin/sway-session"
+#sway_session_path: "/usr/local/bin/sway-session"
+sway_tty_unit: "sway-tty1.service"
+sway_tty_device: "/dev/tty1"
+enable_linger: true
+

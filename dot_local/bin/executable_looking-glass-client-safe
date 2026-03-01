@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VM="${1:-win10}"
+URI="${LIBVIRT_URI:-qemu:///system}"
+VIRSH=(virsh -c "$URI")
+
+need() { command -v "$1" >/dev/null || { echo "missing: $1"; exit 1; }; }
+need nc
+[ -e /dev/kvmfr0 ] || { echo "/dev/kvmfr0 missing"; exit 1; }
+
+# domain exists?
+if ! "${VIRSH[@]}" dominfo "$VM" >/dev/null 2>&1; then
+  echo "domain not found: '$VM' on $URI"
+  echo "tip: ${VIRSH[*]} list --all"
+  exit 1
+fi
+
+# start if not running
+if ! "${VIRSH[@]}" domstate "$VM" | grep -q running; then
+  "${VIRSH[@]}" start "$VM"
+fi
+
+# get SPICE host:port
+DSP=$("${VIRSH[@]}" domdisplay "$VM" --type spice) || {
+  echo "no SPICE display; enable SPICE in VM config"; exit 1; }
+HOST=$(printf %s "$DSP" | sed -E 's#spice://([^:]+):([0-9]+)#\1#')
+PORT=$(printf %s "$DSP" | sed -E 's#spice://([^:]+):([0-9]+)#\2#')
+
+# wait for SPICE
+for i in {1..60}; do
+  if nc -z "$HOST" "$PORT" 2>/dev/null; then break; fi
+  sleep 0.5
+done
+
+#exec looking-glass-client -s "$HOST:$PORT"
+exec looking-glass-client 

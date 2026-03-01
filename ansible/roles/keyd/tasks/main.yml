@@ -1,0 +1,18 @@
+---
+# roles/keyd/tasks/main.yml
+
+- name: Ensure keyd is installed
+  ansible.builtin.package:
+    name: "{{ keyd_package_name }}"
+    state: present
+
+- name: Deploy keyd device configs
+  ansible.builtin.template:
+    src: "device.conf.j2"
+    dest: "/etc/keyd/{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ keyd_device_configs }}"
+  notify: Restart keyd
+

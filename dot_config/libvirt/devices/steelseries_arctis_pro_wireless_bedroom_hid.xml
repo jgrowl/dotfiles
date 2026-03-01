@@ -1,0 +1,28 @@
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='5' device='10'/></source>
+</hostdev>
+
+
+<!-- bedroom HID -->
+<!--
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='5' device='10'/></source>
+</hostdev>
+  -->
+
+<!--
+lsusb -d 1038:1290
+lsusb -d 1038:1294
+
+then update the <address bus='X' device='Y'/> accordingly.
+
+
+or maybe
+root@keen:/home/jon/.local/share/chezmoi# 
+udevadm info -q path -n /dev/bus/usb/001/017 | sed -n 's#.*/1-\([0-9.]\+\).*#\1#p'
+3.1.1.1.2
+
+<hostdev mode='subsystem' type='usb' managed='yes'>
+  <source><address bus='1' port='3.1.1.1.2'/></source>
+</hostdev>
+-->

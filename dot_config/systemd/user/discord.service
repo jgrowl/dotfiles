@@ -1,0 +1,31 @@
+[Unit]
+Description=Discord (Flatpak)
+After=sway-session.target
+PartOf=sway-session.target
+
+[Service]
+Type=simple
+
+# Prefer Wayland for Electron
+#Environment=ELECTRON_OZONE_PLATFORM_HINT=wayland
+
+# Force ozone/Wayland explicitly (works even if hint is ignored)
+#ExecStart=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=discord com.discordapp.Discord
+#ExecStart=/usr/bin/flatpak run com.discordapp.Discord --enable-features=UseOzonePlatform --ozone-platform=wayland
+
+# I can't use wayland for discord specifically, because it breaks push to talk, especially with mouse keybinds!
+# Force X11/XWayland so Discord Push-to-Talk can use global input
+Environment=GDK_BACKEND=x11
+Environment=ELECTRON_OZONE_PLATFORM_HINT=x11
+
+ExecStart=/usr/bin/flatpak run com.discordapp.Discord
+
+#ExecStart=/usr/bin/flatpak run com.discordapp.Discord
+
+#ExecStart=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=discord com.discordapp.Discord --enable-features=UseOzonePlatform --ozone-platform=wayland
+
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=sway-session.target

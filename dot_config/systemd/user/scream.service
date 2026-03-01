@@ -1,0 +1,10 @@
+[Unit]
+Description=Scream UDP receiver (PipeWire/Pulse)
+
+[Service]
+ExecStart=%h/.local/share/chezmoi/scripts/scream-recv.sh
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+

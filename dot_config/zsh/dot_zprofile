@@ -14,15 +14,18 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     #fi
     #
     #
-    # Auto-start sway only once per boot on first TTY login
-    if [[ -z $SSH_CONNECTION && -z $DISPLAY && -z $WAYLAND_DISPLAY && ${XDG_VTNR:-0} -eq 1 ]]; then
-      marker="${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-autostarted-this-boot"
-      if [[ ! -e "$marker" ]]; then
-        mkdir -p "${marker%/*}"
-        : > "$marker"          # create the stamp file
-        exec sway              # replace the login shell with sway
-      fi
-    fi
+#    # Auto-start sway only once per boot on first TTY login
+#    if [[ -z $SSH_CONNECTION && -z $DISPLAY && -z $WAYLAND_DISPLAY && ${XDG_VTNR:-0} -eq 1 ]]; then
+#      marker="${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-autostarted-this-boot"
+#      if [[ ! -e "$marker" ]]; then
+#        mkdir -p "${marker%/*}"
+#        : > "$marker"          # create the stamp file
+#        exec sway              # replace the login shell with sway
+#      fi
+#    fi
+#
+#
+    export GTK_THEME=Adwaita:dark
 
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then

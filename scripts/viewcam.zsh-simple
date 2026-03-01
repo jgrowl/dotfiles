@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+# Map camera names to video devices
+declare -A CAMERAS
+CAMERAS=(
+  [office]="/dev/video2"
+  [bedroom]="/dev/video0"
+)
+
+CAMNAME="$1"
+DEVICE="${CAMERAS[$CAMNAME]}"
+
+if [[ -z "$DEVICE" ]]; then
+  echo "❌ Unknown camera name '$CAMNAME'. Available: ${(@k)CAMERAS}"
+  exit 1
+fi
+
+echo "🎥 Opening '$CAMNAME' on $DEVICE..."
+
+mpv --title="Webcam [$CAMNAME]" "av://v4l2:$DEVICE"
+

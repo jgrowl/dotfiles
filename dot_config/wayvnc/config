@@ -1,0 +1,7 @@
+# use_relative_paths=true
+# address=0.0.0.0
+# enable_auth=true
+# username=luser
+# password=p455w0rd
+# private_key_file=tls_key.pem
+# certificate_file=tls_cert.pem

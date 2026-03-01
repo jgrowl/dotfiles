@@ -1,0 +1,3 @@
+- import_playbook: playbooks/debian_unstable.yml
+- import_playbook: playbooks/sway.yml
+- import_playbook: playbooks/keyd.yml

@@ -1,0 +1,11 @@
+---
+# roles/keyd/handlers/main.yml
+
+- name: Restart keyd
+  ansible.builtin.service:
+    name: "{{ keyd_service_name }}"
+    state: restarted
+    enabled: true
+
+
+# TODO: sudo keyd.rvaiya reload 

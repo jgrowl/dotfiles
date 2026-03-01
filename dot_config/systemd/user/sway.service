@@ -1,0 +1,72 @@
+#[Unit]
+#Description=Sway Wayland compositor
+#Documentation=man:sway(5)
+#After=graphical-session-pre.target
+#Wants=graphical-session-pre.target
+#
+#[Service]
+#Type=simple
+##ExecStart=/usr/local/bin/sway-session
+##ExecStart=/home/jon/.local/bin/sway-session
+## Always attach to tty1
+#StandardInput=tty
+#TTYPATH=/dev/tty1
+#TTYReset=yes
+#TTYVHANGUP=yes
+#ExecStart=/usr/bin/sway --unsupported-gpu
+#Restart=on-failure
+#
+## Look some of these we might not want to do because some apps inheret these settings and it can break how they work
+##Environment=SDL_VIDEODRIVER=wayland
+#
+## Core Wayland environment
+#Environment=XDG_SESSION_TYPE=wayland
+#Environment=XDG_CURRENT_DESKTOP=sway
+#Environment=MOZ_ENABLE_WAYLAND=1
+#
+## Renderer + GPU
+#Environment=WLR_DRM_DEVICES=/dev/dri/card0
+##Environment=WLR_DRM_DEVICES=/dev/dri/card1:/dev/dri/card0
+#Environment=WLR_RENDERER=vulkan
+#
+## Toolkit backends
+#Environment=QT_QPA_PLATFORM=wayland
+#Environment=GDK_BACKEND=wayland
+#
+#[Install]
+#WantedBy=default.target
+#
+#
+## # This was used before I was starting sway as a system level job to ensure that the system could automatically 
+## # re-attached and reload sway. Otherwise it drops you to a tty upon crash.
+##
+## [Unit]
+## Description=Sway Wayland compositor
+## Documentation=man:sway(1)
+## # Start this after the user session scaffolding is up
+## After=graphical-session-pre.target
+## Wants=graphical-session.target
+## 
+## [Service]
+## Type=simple
+## # If you sometimes use NVIDIA, you may need: /usr/bin/sway --unsupported-gpu
+## ExecStart=/usr/bin/sway
+## Restart=always
+## RestartSec=2
+## # Helpful env for Wayland-first apps; harmless otherwise
+## Environment=XDG_SESSION_TYPE=wayland
+## Environment=SDL_VIDEODRIVER=wayland
+## Environment=QT_QPA_PLATFORM=wayland
+## 
+## Environment=GDK_BACKEND=wayland
+## Environment=MOZ_ENABLE_WAYLAND=1
+## 
+## # Keep logs in the journal
+## StandardOutput=journal
+## StandardError=journal
+## # Kill the whole process group on stop/restart to avoid stragglers
+## KillMode=control-group
+## 
+## [Install]
+## WantedBy=default.target
+## 

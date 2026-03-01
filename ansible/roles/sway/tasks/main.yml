@@ -1,0 +1,240 @@
+- name: Ensure user exists (optional if already present)
+  become: true
+  user:
+    name: "{{ sway_user }}"
+    state: present
+    create_home: yes
+
+- name: Ensure render/video groups exist
+  become: true
+  group:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - render
+    - video
+
+- name: Ensure user is in render/video groups
+  become: true
+  user:
+    name: "{{ sway_user }}"
+    groups: "render,video"
+    append: true
+  notify: Restart sway on tty1
+
+- name: Install sway-tty1 systemd unit
+  become: true
+  template:
+    src: sway-tty1@.service.j2
+    dest: /etc/systemd/system/sway-tty1@.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd
+    - Restart sway on tty1
+
+- name: Enable and start sway on tty1
+  become: true
+  systemd:
+    name: "sway-tty1@{{ sway_user }}.service"
+    enabled: yes
+    state: started
+
+- name: Disable getty@tty1 (handled by Conflicts= but keep it clean)
+  become: true
+  systemd:
+    name: getty@tty1.service
+    enabled: no
+    state: stopped
+
+
+
+# # # - name: Ensure user exists (optional if already present)
+# # #   become: true
+# # #   user:
+# # #     name: "{{ sway_user }}"
+# # #     state: present
+# # #     create_home: yes
+# # # 
+# # # # Make sure the GPU access groups exist
+# # # - name: Ensure render/video groups exist
+# # #   become: true
+# # #   group:
+# # #     name: "{{ item }}"
+# # #     state: present
+# # #   loop:
+# # #     - render
+# # #     - video
+# # # 
+# # # - name: Ensure user is in render/video groups
+# # #   become: true
+# # #   user:
+# # #     name: "{{ sway_user }}"
+# # #     groups: "render,video"
+# # #     append: true
+# # #   notify: Restart sway instance
+# # # 
+# # # - name: (Optional) enable linger so user manager is available early
+# # #   become: true
+# # #   when: enable_linger | default(true)
+# # #   command: "loginctl enable-linger {{ sway_user }}"
+# # #   changed_when: false
+# # # 
+# # # 
+# # # - name: Enable and start sway on tty1
+# # #   become: true
+# # #   systemd:
+# # #     name: "sway-tty1@{{ sway_user }}.service"
+# # #     enabled: yes
+# # #     state: started
+# # # 
+# # # - name: Disable getty@tty1 (handled by Conflicts= but keep it clean)
+# # #   become: true
+# # #   systemd:
+# # #     name: getty@tty1.service
+# # #     enabled: no
+# # #     state: stopped
+
+
+# No longer needed if you’re not using a sway-session wrapper script
+# - name: Install sway-session launcher
+#   become: true
+#   template:
+#     src: sway-session.sh.j2
+#     dest: /usr/local/bin/sway-session
+#     owner: root
+#     group: root
+#     mode: "0755"
+
+# - name: Ensure getty override directory exists
+#   become: true
+#   file:
+#     path: /etc/systemd/system/getty@tty1.service.d/
+#     state: directory
+#     mode: "0755"
+#     owner: root
+#     group: root
+# 
+# - name: Install override
+#   become: true
+#   template:
+#     src: override.conf.j2
+#     dest: /etc/systemd/system/getty@tty1.service.d/override.conf
+#     owner: root
+#     group: root
+#     mode: "0644"
+
+
+
+
+## - name: Ensure user exists (optional if already present)
+##   user:
+##     name: "{{ sway_user }}"
+##     state: present
+##     create_home: yes
+## 
+## # Make sure the GPU access groups exist
+## - name: Ensure render/video groups exist
+##   group:
+##     name: "{{ item }}"
+##     state: present
+##   loop:
+##     - render
+##     - video
+## 
+## - name: Ensure user is in render/video groups
+##   user:
+##     name: "{{ sway_user }}"
+##     groups: "render,video"
+##     append: true
+##   notify: Restart sway instance
+## 
+## 
+## - name: (Optional) enable linger so user manager is available early
+##   when: enable_linger | default(true)
+##   command: "loginctl enable-linger {{ sway_user }}"
+##   changed_when: false
+## 
+## # - name: Install sway-session launcher
+## #   template:
+## #     src: sway-session.sh.j2
+## #     #dest: "{{ sway_session_path }}"   # e.g. /usr/local/bin/sway-session
+## #     dest: /usr/local/bin/sway-session   # e.g. /usr/local/bin/sway-session
+## #     #dest: /home/jon/.local/bin/sway-session
+## #     owner: root
+## #     group: root
+## #     mode: "0755"
+## 
+## 
+## - name: Ensure getty override directory exists
+##   become: true
+##   file:
+##     path: /etc/systemd/system/getty1.service.d/
+##     state: directory
+##     mode: "0755"
+## 
+## 
+## - name: Install override
+##   template:
+##     src: override.conf.j2
+##     dest: /etc/systemd/system/getty1.service.d/override.conf   
+##     owner: root
+##     group: root
+##     mode: "0755"
+## 
+## 
+## 
+## # # Write the TEMPLATE unit (note the @.service filename on disk)
+## # - name: Install systemd unit template for Sway (@.service)
+## #   template:
+## #     src: sway-tty1@.service.j2
+## #     dest: /etc/systemd/system/sway-tty1@.service
+## #     owner: root
+## #     group: root
+## #     mode: "0644"
+## # 
+## 
+## 
+## # # Enable the INSTANCE for the current user, and reload systemd in the same step
+## # - name: Enable and start Sway on tty1 (instance)
+## #   systemd:
+## #     name: "sway-tty1@{{ sway_user }}.service"
+## #     enabled: true
+## #     state: started
+## #     daemon_reload: true
+## 
+## 
+## 
+## 
+## # # Enable the INSTANCE for the current user, and reload systemd in the same step
+## # - name: Enable and start Sway on tty1 (instance)
+## #   systemd:
+## #     name: "sway-tty1@tty1.service"
+## #     enabled: true
+## #     state: started
+## #     daemon_reload: true
+## # 
+##     # 
+##     #
+##     #
+##     #
+##     #
+##     #
+##     #
+##     #
+## # # Write the TEMPLATE unit (note the @.service filename on disk)
+## # - name: Install systemd unit template for Sway on tty1
+## #   copy:
+## #     src: sway-tty1.service            # file in roles/sway/files; its name is arbitrary
+## #     dest: /etc/systemd/system/sway-tty1@.service
+## #     owner: root
+## #     group: root
+## #     mode: "0644"
+## ## Enable the INSTANCE for the current user, and reload systemd in the same step
+## #- name: Enable and start Sway on tty1 (instance)
+## #  systemd:
+## #    name: "sway-tty1@{{ sway_user }}.service"
+## #    enabled: true
+## #    state: started
+## #    daemon_reload: true
