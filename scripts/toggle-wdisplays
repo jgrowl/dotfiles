@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Try to find an existing wdisplays window via sway (best way)
+if command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  IDS="$(swaymsg -rt get_tree \
+    | jq -r '.. | objects
+        | select(.app_id? == "wdisplays" or .window_properties?.class? == "wdisplays")
+        | .id')"
+
+  if [[ -n "${IDS}" ]]; then
+    while read -r id; do
+      [[ -n "$id" ]] && swaymsg "[con_id=${id}]" kill >/dev/null
+    done <<< "${IDS}"
+    exit 0
+  fi
+fi
+
+# Fallback: toggle by process (in case app_id/class detection fails)
+if pgrep -x wdisplays >/dev/null 2>&1; then
+  pkill -x wdisplays
+else
+  nohup /usr/bin/wdisplays >/dev/null 2>&1 &
+fi
+

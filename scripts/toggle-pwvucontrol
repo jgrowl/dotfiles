@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Toggle PipeWire Volume Control (pwvucontrol)
+# - Detect via sway tree by app_id/class/title
+# - Prefer Flatpak if installed, else native binary
+
+launch() {
+  if command -v flatpak >/dev/null 2>&1 && flatpak info com.saivert.pwvucontrol >/dev/null 2>&1; then
+    nohup flatpak run com.saivert.pwvucontrol >/dev/null 2>&1 &
+  elif command -v pwvucontrol >/dev/null 2>&1; then
+    nohup pwvucontrol >/dev/null 2>&1 &
+  else
+    echo "pwvucontrol not found (flatpak or native)" >&2
+    exit 1
+  fi
+  disown
+}
+
+# Try to find an existing window via sway tree (best)
+if command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  IDS="$(swaymsg -rt get_tree \
+    | jq -r '
+      .. | objects
+      | select(
+          (.app_id? // "" | ascii_downcase) as $id
+          | ($id == "com.saivert.pwvucontrol" or ($id | contains("pwvucontrol")))
+          or
+          ((.window_properties?.class? // "" | ascii_downcase) | contains("pwvucontrol"))
+          or
+          ((.name? // "" | ascii_downcase) | contains("pipewire volume control"))
+        )
+      | .id
+    ')"
+  if [[ -n "${IDS}" ]]; then
+    while read -r id; do
+      [[ -n "${id}" ]] && swaymsg "[con_id=${id}]" kill >/dev/null
+    done <<< "${IDS}"
+    exit 0
+  fi
+fi
+
+# Fallback: toggle by process name
+if pgrep -x pwvucontrol >/dev/null 2>&1; then
+  pkill -x pwvucontrol
+else
+  launch
+fi
+
