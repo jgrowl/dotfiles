@@ -1,0 +1,26 @@
+profile home {
+    output "LG Electronics LG ULTRAGEAR 508BNGU0N119" {
+        mode 2560x1440@179.959Hz
+        position 1440,1080
+        transform normal
+    }
+    output "LG Electronics LG ULTRAGEAR 410NTWG86233" {
+        mode 2560x1440@143.973Hz
+        position 4000,887
+        transform 270
+    }
+    output "LG Electronics LG ULTRAGEAR 407NTEP51236" {
+        mode 2560x1440@99.946Hz
+        position 0,887
+        transform 90
+    }
+    output "Ancor Communications Inc VS278 FBLMQS084061" {
+        mode 1920x1080@60Hz
+        position 2080,0
+        transform normal
+    }
+}
+
+profile laptop {
+    output eDP-1 enable
+}
