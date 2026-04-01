@@ -38,28 +38,24 @@ include /etc/sway/config-vars.d/*
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 # DP-3 = LG Electronics LG ULTRAGEAR (serial: 310NTABB2240)
-output DP-3 adaptive_sync on resolution 2560x1440 position 2560,1080
-workspace 1 output DP-3
+# output DP-3 adaptive_sync on resolution 2560x1440 position 2560,1080
 # DP-1 = LG Electronics LG ULTRAGEAR (serial: 410NTWG86233)
-output DP-1 adaptive_sync on resolution 2560x1440 position 5120,1080
-workspace 2 output DP-1
+# output DP-1 adaptive_sync on resolution 2560x1440 position 5120,1080
 #output DP-4 disable 
 
-output HDMI-A-1 resolution 2560x1440 position 0,1080
-workspace 3 output HDMI-A-1
+# output HDMI-A-1 resolution 2560x1440 position 0,1080
 
 
 #Output HDMI-A-1 'RST 1to4          0x00000001' (focused)
 
 # DP-2 = Ancor Communications Inc VS278 (serial: FBLMQS084061)
-output DP-2 resolution 1920x1080 position 3800,0
+# output DP-2 resolution 1920x1080 position 3800,0
 #output DP-2 resolution 1920x1080 position 1920,0
-workspace 4 output DP-2
 #mouse_warping output
 
 # For Home use with specific monitor setup.
 # If I change graphic cards or something, this should assign to specific monitors
-#exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-assign.sh
+exec_always --no-startup-id /home/jon/.local/share/chezmoi/scripts/sway-assign.sh
 
 #exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_RUNTIME_DIR XDG_SESSION_TYPE; systemctl --user restart swayidle.service
 #exec_always systemctl --user import-environment WAYLAND_DISPLAY XDG_RUNTIME_DIR XDG_SESSION_TYPE; systemctl --user start swayidle.service
@@ -88,6 +84,7 @@ exec_always {
 
     systemctl --user restart discord.service
     systemctl --user restart steam.service
+    systemctl --user restart 1password.service
 }
 
 
@@ -131,8 +128,22 @@ input * {
 #
 
     # Open common programs like browser
-    bindsym $mod+Shift+Ctrl+n exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf
-    bindsym $mod+Shift+Ctrl+p exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf -private
+    # bindsym $mod+Shift+Ctrl+n exec firefox
+    # bindsym $mod+Shift+Ctrl+p exec firefox -private
+
+    # NOTE: In the future, if you find that librewolf is missing text in the url and title bars as well as the right click menu, there is probably
+    # a problem with your XDG_DATA_DIR env variable. I have taken steps to prevent this from happening in the future but for now I'll leave this as docs
+    # I'm currently doing this because for some reason the text in the url bar and title bars and right click menus is missing.
+
+    # bindsym $mod+Shift+Ctrl+n exec "env -u GDK_PIXBUF_MODULE_FILE -u GDK_PIXBUF_MODULEDIR -u GTK_THEME XDG_DATA_DIRS=/usr/local/share:/usr/share /usr/share/librewolf/librewolf --new-instance"
+    # bindsym $mod+Shift+Ctrl+p exec "env -u GDK_PIXBUF_MODULE_FILE -u GDK_PIXBUF_MODULEDIR -u GTK_THEME XDG_DATA_DIRS=/usr/local/share:/usr/share /usr/share/librewolf/librewolf --new-instance --private-window"
+    bindsym $mod+Shift+Ctrl+n exec /usr/share/librewolf/librewolf --new-instance
+    bindsym $mod+Shift+Ctrl+p exec /usr/share/librewolf/librewolf --new-instance --private-window
+
+    # Old wrong way?
+    #bindsym $mod+Shift+Ctrl+n exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf
+    #bindsym $mod+Shift+Ctrl+p exec MOZ_ENABLE_WAYLAND=1 GDK_BACKEND=wayland librewolf -private
+
 
     # Take a screenshot
     # bindsym $mod+Print exec grimshot save output
@@ -345,7 +356,7 @@ for_window [app_id="looking-glass-client"] idle_inhibit fullscreen
 #for_window [class=".*"] border none
 
 #for_window [class="discord"] move to output DP-2
-assign [class="discord"] output DP-2
+# assign [class="discord"] output DP-2
 
 
 # # # This is to fix a cs:go vulkcan screen resizing error. Use windowed mode in game, don't use fullscreen in sway, but just hide bars
@@ -394,6 +405,12 @@ include /etc/sway/config.d/*
 # Output DP-5 'Ancor Communications Inc VS278 FBLMQS084061'
 #output DP-5 resolution 1920x1080 position 4480,1440
 #output DP-5 resolution 1920x1080 position 1920,0
+
+
+
+
+#output HDMI-A-1 transform 270
+#output DP-3 transform 90
 
 
 
