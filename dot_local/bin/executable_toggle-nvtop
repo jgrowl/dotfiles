@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+title="nvtop-monitor"
+
+launch() {
+  if command -v nvtop >/dev/null 2>&1; then
+    nohup alacritty --title "$title" -e nvtop >/dev/null 2>&1 &
+  elif [[ -x /usr/bin/nvtop ]]; then
+    nohup alacritty --title "$title" -e /usr/bin/nvtop >/dev/null 2>&1 &
+  else
+    notify-send "nvtop not found" "Install nvtop or fix PATH"
+    exit 1
+  fi
+  disown || true
+}
+
+if command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  IDS="$(
+    swaymsg -rt get_tree | jq -r --arg title "$title" '
+      .. | objects
+      | select((.name? // "") == $title)
+      | .id
+    '
+  )"
+
+  if [[ -n "${IDS}" ]]; then
+    while read -r id; do
+      [[ -n "${id}" ]] && swaymsg "[con_id=${id}]" kill >/dev/null
+    done <<< "${IDS}"
+    exit 0
+  fi
+fi
+
+launch

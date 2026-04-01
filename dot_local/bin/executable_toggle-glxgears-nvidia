@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+launch() {
+  nohup env \
+    __NV_PRIME_RENDER_OFFLOAD=1 \
+    __GLX_VENDOR_LIBRARY_NAME=nvidia \
+    glxgears >/dev/null 2>&1 &
+  disown || true
+}
+
+if command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  IDS="$(
+    swaymsg -rt get_tree | jq -r '
+      .. | objects
+      | select(
+          ((.app_id? // "" | ascii_downcase) | contains("glxgears"))
+          or
+          ((.window_properties?.class? // "" | ascii_downcase) | contains("glxgears"))
+          or
+          ((.name? // "" | ascii_downcase) | contains("glxgears"))
+        )
+      | .id
+    '
+  )"
+
+  if [[ -n "${IDS}" ]]; then
+    while read -r id; do
+      [[ -n "${id}" ]] && swaymsg "[con_id=${id}]" kill >/dev/null
+    done <<< "${IDS}"
+    exit 0
+  fi
+fi
+
+if pgrep -x glxgears >/dev/null 2>&1; then
+  pkill -x glxgears
+else
+  launch
+fi
+

@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Toggle an app/window in Sway.
+# Kills existing matching windows if found.
+# Otherwise launches the given command in background.
+
+# Usage:
+#   toggle-app "<match-name>" <command> [args...]
+#
+# Example:
+#   toggle-app nvtop alacritty -e nvtop
+#   toggle-app nvitop alacritty -e nvitop
+#   toggle-app nvidia-smi alacritty -e watch -n 1 nvidia-smi
+
+if [[ $# -lt 2 ]]; then
+  echo "usage: $0 <match-name> <command> [args...]" >&2
+  exit 1
+fi
+
+MATCH_NAME="$1"
+shift
+
+launch() {
+  nohup "$@" >/dev/null 2>&1 &
+  disown || true
+}
+
+# Try to find an existing window via sway tree first
+if command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  IDS="$(
+    swaymsg -rt get_tree | jq -r --arg name "$MATCH_NAME" '
+      .. | objects
+      | select(
+          ((.app_id? // "" | ascii_downcase) | contains($name | ascii_downcase))
+          or
+          (((.window_properties?.class? // "") | ascii_downcase) | contains($name | ascii_downcase))
+          or
+          (((.window_properties?.instance? // "") | ascii_downcase) | contains($name | ascii_downcase))
+          or
+          (((.name? // "") | ascii_downcase) | contains($name | ascii_downcase))
+        )
+      | .id
+    '
+  )"
+
+  if [[ -n "${IDS}" ]]; then
+    while read -r id; do
+      [[ -n "${id}" ]] && swaymsg "[con_id=${id}]" kill >/dev/null
+    done <<< "${IDS}"
+    exit 0
+  fi
+fi
+
+# Fallback: toggle by process name
+if pgrep -fi "$MATCH_NAME" >/dev/null 2>&1; then
+  pkill -fi "$MATCH_NAME"
+else
+  launch "$@"
+fi

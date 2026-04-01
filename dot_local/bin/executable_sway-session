@@ -53,12 +53,15 @@ wait_for_sockets() {
 
 #exec /usr/bin/sway --unsupported-gpu --drm-device /dev/dri/card0
 
-export WLR_DRM_DEVICES=/dev/dri/by-path/pci-0000:0e:00.0-card
+#export WLR_DRM_DEVICES=/dev/dri/by-path/pci-0000:0e:00.0-card
+#export WLR_DRM_DEVICES=/dev/dri/card0
+
+#exec /usr/bin/sway --unsupported-gpu
+
+
 export WLR_DRM_DEVICES=/dev/dri/card0
-
-exec /usr/bin/sway --unsupported-gpu
-
-
+#export WLR_DRM_DEVICES=/dev/dri/card1
+exec /usr/bin/sway 
 
 # #!/usr/bin/env sh
 # # Start a helper in the background that waits for Sway to be ready.

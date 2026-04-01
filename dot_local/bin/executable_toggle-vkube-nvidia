@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+title="vkcube-nvidia"
+
+launch() {
+  nohup env \
+    VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json \
+    __NV_PRIME_RENDER_OFFLOAD=1 \
+    __VK_LAYER_NV_optimus=NVIDIA_only \
+    alacritty --title "$title" -e vkcube >/dev/null 2>&1 &
+  disown || true
+}
+
+if command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+  IDS="$(
+    swaymsg -rt get_tree | jq -r --arg title "$title" '
+      .. | objects
+      | select((.name? // "") == $title)
+      | .id
+    '
+  )"
+
+  if [[ -n "${IDS}" ]]; then
+    while read -r id; do
+      [[ -n "${id}" ]] && swaymsg "[con_id=${id}]" kill >/dev/null
+    done <<< "${IDS}"
+    exit 0
+  fi
+fi
+
+launch
