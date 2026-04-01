@@ -93,3 +93,12 @@ window#waybar {
 #custom-vm_usb_bedroom.inactive {
   opacity: 0.5;
 }
+
+#custom-gpu {
+  padding: 0 4px;
+}
+
+#custom-gpu.low { color: #8ec07c; }
+#custom-gpu.medium { color: #fabd2f; }
+#custom-gpu.high { color: #fb4934; }
+
