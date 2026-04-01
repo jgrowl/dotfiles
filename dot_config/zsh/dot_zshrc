@@ -231,8 +231,26 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then # Linux specific
     #export WAYLAND_DISPLAY="wayland-1"
     export OXIDE_PREFER_WAYLAND=1
 
+    # We need to have a fallback here because if it is empty, it will break things.
+    # idempotent version of the easier statement, so it doesn't include the same thing multiple times
+    #export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+    case ":${XDG_DATA_DIRS:-/usr/local/share:/usr/share}:" in
+      *":/var/lib/flatpak/exports/share:"*) ;;
+      *) XDG_DATA_DIRS="/var/lib/flatpak/exports/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" ;;
+    esac
+
+    case ":$XDG_DATA_DIRS:" in
+      *":$HOME/.local/share/flatpak/exports/share:"*) ;;
+      *) XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS" ;;
+    esac
+
+    export XDG_DATA_DIRS
+
+
+
+    #export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+    #
     # Flatpak
-    export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
     alias discord="flatpak run com.discordapp.Discord"
     #alias discord='flatpak run --env=ELECTRON_OZONE_PLATFORM_HINT=wayland com.discordapp.Discord --enable-features=UseOzonePlatform --ozone-platform=wayland'
 
