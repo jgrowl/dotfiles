@@ -85,6 +85,7 @@ exec_always {
     systemctl --user restart discord.service
     systemctl --user restart steam.service
     systemctl --user restart 1password.service
+    systemctl --user restart kanshi.service
 }
 
 
