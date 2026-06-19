@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+export OPENAI_API_KEY="$(op read 'op://Private/ChatGPT/avante')"
+# TODO: add others and rename 1password entries maybe.
+exec "$@"
