@@ -80,6 +80,14 @@ Collected/
 
 Keep depth shallow. Do not mirror `Downloads/` here — downloads are intake, not identity.
 
+Example:
+
+Collected/
+    Internet/
+        2026/
+            2026-03-11-keanu-reeves-photo.jpg
+            2026-03-11-bowie-live-1976.jpg
+
 ---
 
 ### Screenshots/
