@@ -18,8 +18,12 @@ Environment=XDG_SESSION_TYPE=wayland
 Environment=XDG_RUNTIME_DIR=/run/user/{{ sway_uid | default('1000') }}
 Environment=XDG_CURRENT_DESKTOP=sway
 
+# You shouldn't use the /dev/dri/card0 or 1, it isn't stable, use pci path
+#Environment=WLR_DRM_DEVICES=/dev/dri/by-path/pci-0000:0e:00.0-card
 #Environment=WLR_DRM_DEVICES=/dev/dri/card1:/dev/dri/card0
-Environment=WLR_DRM_DEVICES=/dev/dri/card0
+#Environment=WLR_DRM_DEVICES=/dev/dri/card0
+Environment=WLR_DRM_DEVICES=/dev/dri/card1
+
 
 # This forces sway (wlroots) to use wlroots fulkan renderer
 # Environment=WLR_RENDERER=vulkan
