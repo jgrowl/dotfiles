@@ -13,6 +13,7 @@ if [ $? != 0 ]; then
 	echo "Setting session working directory as '$WORKINGDIR'"
 
 	tmux new-session -d -s $SESH -n "editor"
+
 	tmux send-keys -t $SESH:editor "cd $WORKINGDIR" C-m
 	tmux send-keys -t $SESH:editor "$EDITOR ." C-m
 
