@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=digiKam AppImage
+Exec=/home/jon/.local/bin/digikam-appimage
+Icon=digikam
+Type=Application
+Categories=Graphics;Photography;
+Terminal=false

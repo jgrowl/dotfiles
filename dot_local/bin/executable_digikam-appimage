@@ -1,0 +1,3 @@
+#!/bin/sh
+export QT_QPA_PLATFORM=xcb
+exec "$HOME/Applications/digiKam-9.1.0-Qt6-x86-64.appimage" "$@"
