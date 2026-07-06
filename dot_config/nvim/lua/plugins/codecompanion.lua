@@ -18,10 +18,20 @@ return {
         keymaps = {
           close = false,
         },
+
         adapter = {
           name = 'openai',
           model = 'gpt-5.5',
         },
+
+        -- Keep CodeCompanion's default system prompt.
+        -- Project-specific behavior is added through rules below.
+        opts = {
+          system_prompt = function(ctx)
+            return ctx.default_system_prompt
+          end,
+        },
+
         tools = {
           opts = {
             -- Tools and/or groups that are always loaded in a chat buffer.
@@ -46,6 +56,91 @@ return {
         adapter = {
           name = 'openai',
           model = 'gpt-5.5',
+        },
+      },
+    },
+
+    rules = {
+      -- Personal defaults that should apply everywhere.
+      global = {
+        description = 'General coding preferences',
+        files = {
+          vim.fn.expand '~/.config/nvim/ai/codecompanion/global.md',
+        },
+      },
+
+      -- Rust/Leptos-specific defaults.
+      rust_leptos = {
+        description = 'Rust, Leptos, wasm, and UI conventions',
+        files = {
+          vim.fn.expand '~/.config/nvim/ai/codecompanion/rust-leptos.md',
+        },
+      },
+
+      -- Repository-local instruction files.
+      -- These let each repo override or extend the global rules without
+      -- hardcoding all instructions in your Neovim config.
+      project = {
+        description = 'Repository-local project instructions',
+        files = {
+          'AGENTS.md',
+          'CLAUDE.md',
+          '.codecompanion/rules.md',
+          '.codecompanion/project.md',
+          '.github/copilot-instructions.md',
+        },
+      },
+
+      -- Optional: Ourania-specific rules.
+      -- This file can exist only inside the Ourania repo.
+      ourania = {
+        description = 'Ourania astrology app rules',
+        files = {
+          '.codecompanion/ourania.md',
+        },
+      },
+
+      -- Optional: Kleio-specific rules.
+      -- This file can exist only inside the Kleio repo.
+      kleio = {
+        description = 'Kleio genealogy/data rules',
+        files = {
+          '.codecompanion/kleio.md',
+        },
+      },
+
+      opts = {
+        chat = {
+          enabled = true,
+
+          -- These rule groups are loaded into every new chat.
+          -- If a referenced repo-local file does not exist, CodeCompanion
+          -- may warn in the log; that is usually harmless.
+          autoload = function()
+            local cwd = vim.fn.getcwd()
+            local groups = {
+              'global',
+              'project',
+            }
+
+            local is_rust = vim.fn.filereadable(cwd .. '/Cargo.toml') == 1
+            local is_ourania = cwd:find('ourania', 1, true) ~= nil
+            local is_kleio = cwd:find('kleio', 1, true) ~= nil
+
+            if is_rust or is_ourania or is_kleio then
+              table.insert(groups, 'rust_leptos')
+            end
+
+            if is_ourania then
+              table.insert(groups, 'ourania')
+            end
+
+            if is_kleio then
+              table.insert(groups, 'kleio')
+            end
+
+            return groups
+          end,
         },
       },
     },
