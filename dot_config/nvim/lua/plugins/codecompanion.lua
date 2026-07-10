@@ -93,10 +93,10 @@ return {
 
       -- Optional: Ourania-specific rules.
       -- This file can exist only inside the Ourania repo.
-      ourania = {
-        description = 'Ourania astrology app rules',
+      urania = {
+        description = 'Urania astrology app rules',
         files = {
-          '.codecompanion/ourania.md',
+          '.codecompanion/urania.md',
         },
       },
 
@@ -124,15 +124,15 @@ return {
             }
 
             local is_rust = vim.fn.filereadable(cwd .. '/Cargo.toml') == 1
-            local is_ourania = cwd:find('ourania', 1, true) ~= nil
+            local is_urania = cwd:find('urania', 1, true) ~= nil
             local is_kleio = cwd:find('kleio', 1, true) ~= nil
 
-            if is_rust or is_ourania or is_kleio then
+            if is_rust or is_urania or is_kleio then
               table.insert(groups, 'rust_leptos')
             end
 
-            if is_ourania then
-              table.insert(groups, 'ourania')
+            if is_urania then
+              table.insert(groups, 'urania')
             end
 
             if is_kleio then
