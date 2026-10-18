@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Adding this because my log got huge without me realizing it before and it broke things.
-vim.lsp.set_log_level 'ERROR'
+vim.lsp.log.set_level 'ERROR'
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -364,7 +364,7 @@ require('lazy').setup({
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
+    branch = 'master',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -626,7 +626,7 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -653,7 +653,7 @@ require('lazy').setup({
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
@@ -958,204 +958,218 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+
+    config = function()
+      local treesitter = require 'nvim-treesitter'
+
+      treesitter.setup {
+        install_dir = vim.fn.stdpath 'data' .. '/site',
+      }
+
+      local parsers = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'rust',
+        'toml',
+        'vim',
+        'vimdoc',
+      }
+
+      treesitter.install(parsers)
+
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = parsers,
+        callback = function()
+          vim.treesitter.start()
+        end,
+      })
+    end,
   },
 
-  {
-    'yetone/avante.nvim',
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    -- ⚠️ must add this setting! ! !
-    build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
-    event = 'VeryLazy',
-    version = false, -- Never set this value to "*"! Never!
-    ---@module 'avante'
-    ---@type avante.Config
-    opts = {
-      -- add any opts here
-      -- this file can contain specific instructions for your project
-      instructions_file = 'avante.md',
-      --enable_greeting = false,
+  -- {
+  --   'yetone/avante.nvim',
+  --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  --   -- ⚠️ must add this setting! ! !
+  --   build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
+  --   event = 'VeryLazy',
+  --   version = false, -- Never set this value to "*"! Never!
+  --   ---@module 'avante'
+  --   ---@type avante.Config
+  --   opts = {
+  --     -- add any opts here
+  --     -- this file can contain specific instructions for your project
+  --     instructions_file = 'avante.md',
+  --     --enable_greeting = false,
 
-      -- for example
-      -- provider = 'claude',
-      provider = 'openai',
-      -- mode = 'legacy',
-      --provider = 'openai',
-      --
+  --     -- for example
+  --     -- provider = 'claude',
+  --     provider = 'openai',
+  --     -- mode = 'legacy',
+  --     --provider = 'openai',
+  --     --
 
-      repo_map = {
-        enabled = true,
-        ignore_patterns = {
-          '%.git',
-          '%.worktree',
-          '__pycache__',
-          'node_modules',
-          'target',
-          'dist',
-          'build',
-          '%.png$',
-          '%.jpg$',
-          '%.jpeg$',
-          '%.gif$',
-          '%.webp$',
-          '%.ico$',
-          '%.pdf$',
-          '%.zip$',
-          '%.tar$',
-          '%.gz$',
-          '%.xz$',
-          '%.7z$',
-          '%.rar$',
-          '%.woff2$',
-          '%.woff$',
-          '%.ttf$',
-          '%.otf$',
-          '%.mp3$',
-          '%.mp4$',
-          '%.mov$',
-          '%.mkv$',
-          '%.bin$',
-          '%.exe$',
-          '%.dll$',
-          '%.so$',
-          '%.dylib$',
-        },
-      },
+  --     repo_map = {
+  --       enabled = true,
+  --       ignore_patterns = {
+  --         '%.git',
+  --         '%.worktree',
+  --         '__pycache__',
+  --         'node_modules',
+  --         'target',
+  --         'dist',
+  --         'build',
+  --         '%.png$',
+  --         '%.jpg$',
+  --         '%.jpeg$',
+  --         '%.gif$',
+  --         '%.webp$',
+  --         '%.ico$',
+  --         '%.pdf$',
+  --         '%.zip$',
+  --         '%.tar$',
+  --         '%.gz$',
+  --         '%.xz$',
+  --         '%.7z$',
+  --         '%.rar$',
+  --         '%.woff2$',
+  --         '%.woff$',
+  --         '%.ttf$',
+  --         '%.otf$',
+  --         '%.mp3$',
+  --         '%.mp4$',
+  --         '%.mov$',
+  --         '%.mkv$',
+  --         '%.bin$',
+  --         '%.exe$',
+  --         '%.dll$',
+  --         '%.so$',
+  --         '%.dylib$',
+  --       },
+  --     },
 
-      providers = {
-        -- ollama = {
-        --   endpoint = 'http://127.0.0.1:11434',
-        --   model = 'qwen3-coder:30b',
-        --   is_env_set = function()
-        --     return true
-        --   end,
-        -- },
+  --     providers = {
+  --       -- ollama = {
+  --       --   endpoint = 'http://127.0.0.1:11434',
+  --       --   model = 'qwen3-coder:30b',
+  --       --   is_env_set = function()
+  --       --     return true
+  --       --   end,
+  --       -- },
 
-        openai = {
-          endpoint = 'https://api.openai.com/v1',
-          model = 'gpt-5.2',
-          timeout = 30000,
-          extra_request_body = {
-            temperature = 0.5,
-          },
-        },
+  --       openai = {
+  --         endpoint = 'https://api.openai.com/v1',
+  --         model = 'gpt-5.2',
+  --         timeout = 30000,
+  --         extra_request_body = {
+  --           temperature = 0.5,
+  --         },
+  --       },
 
-        qwen3_30b = {
-          __inherited_from = 'openai',
-          api_key_name = '',
-          endpoint = 'http://localhost:11434/v1',
-          model = 'qwen3:30b',
-          -- extra_request_body = {
-          --   temperature = 0.4,
-          -- },
-          mode = 'legacy',
-          -- reasoning = false,
+  --       qwen3_30b = {
+  --         __inherited_from = 'openai',
+  --         api_key_name = '',
+  --         endpoint = 'http://localhost:11434/v1',
+  --         model = 'qwen3:30b',
+  --         -- extra_request_body = {
+  --         --   temperature = 0.4,
+  --         -- },
+  --         mode = 'legacy',
+  --         -- reasoning = false,
 
-          -- disable_tools = true,
-          -- use_tools = false,
-          -- tool_call = false,
-        },
+  --         -- disable_tools = true,
+  --         -- use_tools = false,
+  --         -- tool_call = false,
+  --       },
 
-        qwen3_coder_30b = {
-          __inherited_from = 'openai',
-          api_key_name = '',
-          endpoint = 'http://localhost:11434/v1',
-          model = 'qwen3-coder:30b',
-          mode = 'legacy',
-          extra_request_body = {
-            temperature = 0.2,
-          },
+  --       qwen3_coder_30b = {
+  --         __inherited_from = 'openai',
+  --         api_key_name = '',
+  --         endpoint = 'http://localhost:11434/v1',
+  --         model = 'qwen3-coder:30b',
+  --         mode = 'legacy',
+  --         extra_request_body = {
+  --           temperature = 0.2,
+  --         },
 
-          -- disable_tools = true,
-          -- use_tools = false,
-          -- tool_call = false,
-        },
+  --         -- disable_tools = true,
+  --         -- use_tools = false,
+  --         -- tool_call = false,
+  --       },
 
-        -- claude = {
-        --   endpoint = 'https://api.anthropic.com',
-        --   model = 'claude-sonnet-4-20250514',
-        --   timeout = 30000, -- Timeout in milliseconds
-        --   extra_request_body = {
-        --     temperature = 0.75,
-        --     max_tokens = 20480,
-        --   },
-        -- },
-        -- moonshot = {
-        --   endpoint = 'https://api.moonshot.ai/v1',
-        --   model = 'kimi-k2-0711-preview',
-        --   timeout = 30000, -- Timeout in milliseconds
-        --   extra_request_body = {
-        --     temperature = 0.75,
-        --     max_tokens = 32768,
-        --   },
-        -- },
-      },
+  --       -- claude = {
+  --       --   endpoint = 'https://api.anthropic.com',
+  --       --   model = 'claude-sonnet-4-20250514',
+  --       --   timeout = 30000, -- Timeout in milliseconds
+  --       --   extra_request_body = {
+  --       --     temperature = 0.75,
+  --       --     max_tokens = 20480,
+  --       --   },
+  --       -- },
+  --       -- moonshot = {
+  --       --   endpoint = 'https://api.moonshot.ai/v1',
+  --       --   model = 'kimi-k2-0711-preview',
+  --       --   timeout = 30000, -- Timeout in milliseconds
+  --       --   extra_request_body = {
+  --       --     temperature = 0.75,
+  --       --     max_tokens = 32768,
+  --       --   },
+  --       -- },
+  --     },
 
-      config = function(_, opts)
-        -- Avante is configured exactly once here
-        require('avante').setup(opts)
-      end,
-    },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-      --- The below dependencies are optional,
-      'nvim-mini/mini.pick', -- for file_selector provider mini.pick
-      'nvim-telescope/telescope.nvim', -- for file_selector provider telescope
-      'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
-      'ibhagwan/fzf-lua', -- for file_selector provider fzf
-      'stevearc/dressing.nvim', -- for input provider dressing
-      'folke/snacks.nvim', -- for input provider snacks
-      'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
-      'zbirenbaum/copilot.lua', -- for providers='copilot'
-      {
-        -- support for image pasting
-        'HakonHarnes/img-clip.nvim',
-        event = 'VeryLazy',
-        opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
-            use_absolute_path = true,
-          },
-        },
-      },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { 'markdown', 'Avante' },
-        },
-        ft = { 'markdown', 'Avante' },
-      },
-    },
-  },
+  --     config = function(_, opts)
+  --       -- Avante is configured exactly once here
+  --       require('avante').setup(opts)
+  --     end,
+  --   },
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --     'MunifTanjim/nui.nvim',
+  --     --- The below dependencies are optional,
+  --     'nvim-mini/mini.pick', -- for file_selector provider mini.pick
+  --     'nvim-telescope/telescope.nvim', -- for file_selector provider telescope
+  --     'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
+  --     'ibhagwan/fzf-lua', -- for file_selector provider fzf
+  --     'stevearc/dressing.nvim', -- for input provider dressing
+  --     'folke/snacks.nvim', -- for input provider snacks
+  --     'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
+  --     'zbirenbaum/copilot.lua', -- for providers='copilot'
+  --     {
+  --       -- support for image pasting
+  --       'HakonHarnes/img-clip.nvim',
+  --       event = 'VeryLazy',
+  --       opts = {
+  --         -- recommended settings
+  --         default = {
+  --           embed_image_as_base64 = false,
+  --           prompt_for_file_name = false,
+  --           drag_and_drop = {
+  --             insert_mode = true,
+  --           },
+  --           -- required for Windows users
+  --           use_absolute_path = true,
+  --         },
+  --       },
+  --     },
+  --     {
+  --       -- Make sure to set this up properly if you have lazy=true
+  --       'MeanderingProgrammer/render-markdown.nvim',
+  --       opts = {
+  --         file_types = { 'markdown', 'Avante' },
+  --       },
+  --       ft = { 'markdown', 'Avante' },
+  --     },
+  --   },
+  -- },
 
   -- {
   --   'yetone/avante.nvim',
